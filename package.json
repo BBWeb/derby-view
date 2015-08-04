@@ -1,0 +1,27 @@
+{
+  "name": "derby-view",
+  "version": "0.1.0",
+  "description": "Derby plugin for creating map/reduce -style views and queries of those views",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "derby": "^0.6.0-alpha31"
+  },
+  "author": "cjblomqvist <carl@cjblomqvist.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BBWeb/derby-view.git"
+  },
+  "keywords": [
+    "derby",
+    "plugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/BBWeb/derby-view/issues"
+  },
+  "homepage": "https://github.com/BBWeb/derby-view",
+  "readmeFilename": "README.md"
+}

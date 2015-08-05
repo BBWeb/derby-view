@@ -42,19 +42,26 @@ module.exports = function(racer) {
             view._delete(id);
           }
 
+          var subSegments = segments.slice(view.segments.length);
+
+          console.log(subSegments);
+
+          var id  = subSegments.shift();
           var value = eventArgs.shift();
           var previous = eventArgs.shift();
-          var id = (value && value.id) || previous.id;
 
           if(type === 'change') {
-            if(value === undefined) {
-              del(view, id);
-            } else if(previous === undefined) {
-              add(view, id, value);
-            } else {
-              // Change (= delete + add)
-              del(view, id);
-              add(view, id, value);
+            // TODO: FIXME
+            if(!subSegments.length) {
+              if(subSegments.length || (typeof value !== undefined && typeof previous !== undefined)) {
+                // Change (= delete + add)
+                del(view, id);
+                add(view, id, value);
+              } else if(value === undefined) {
+                del(view, id);
+              } else {
+                add(view, id, value);
+              }
             }
           } else if(type === 'load') {
             add(view, id, value);
@@ -285,6 +292,7 @@ View.prototype._init = function () {
 };
 
 View.prototype._delete = function (id) {
+  // TODO: Check if we need to go to root here - I dont think so
   var keys = this.model.root._get(this.idsSegments.concat(id))
 
   if(typeof keys !== 'undefined') {
@@ -298,8 +306,7 @@ View.prototype._delete = function (id) {
       this.model.root._removeRef(refSegments, refSegments.join('.'));
     }
   }
-
-  delete this.ids[id];
+  this.model._del(this.idsSegments.concat(id));
 };
 
 View.prototype._insert = function (key) {

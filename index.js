@@ -44,8 +44,6 @@ module.exports = function(racer) {
 
           var subSegments = segments.slice(view.segments.length);
 
-          console.log(subSegments);
-
           var id  = subSegments.shift();
           var value = eventArgs.shift();
           var previous = eventArgs.shift();

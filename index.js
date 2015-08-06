@@ -51,7 +51,7 @@ module.exports = function(racer) {
           if(type === 'change') {
             // TODO: FIXME
             if(!subSegments.length) {
-              if(subSegments.length || (typeof value !== undefined && typeof previous !== undefined)) {
+              if(subSegments.length || (typeof value !== 'undefined' && typeof previous !== 'undefined')) {
                 // Change (= delete + add)
                 del(view, id);
                 add(view, id, value);

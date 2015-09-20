@@ -31,7 +31,7 @@ module.exports = function(racer) {
         var view = map[path];
         if (pass.$view === view) continue;
         if (util.mayImpact(view.segments, segments)) {
-          var type = eventArgs.shift();
+          var type = eventArgs[0];
 
           function add(view, id, value) {
             var emit = getEmit(view, id);
@@ -45,8 +45,8 @@ module.exports = function(racer) {
           var subSegments = segments.slice(view.segments.length);
 
           var id  = subSegments.shift();
-          var value = eventArgs.shift();
-          var previous = eventArgs.shift();
+          var value = eventArgs[1];
+          var previous = eventArgs[2];
 
           if(type === 'change') {
             // TODO: FIXME

@@ -344,6 +344,8 @@ View.prototype._insertPosition = function (key, options) {
 
 function getEmit(view, id) {
   return function ret(key, path) {
+    var path = path || view.path + '.' + id;
+
     view.model.root.ref(view.pathsSegments.concat(key).join('.'), path);
     view.model._push(view.idsSegments.concat(id), key);
     view._insert(key);

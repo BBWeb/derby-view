@@ -1,3 +1,4 @@
+var uuid = require('uuid');
 var util = require('derby/node_modules/racer/lib/util');
 var defaultFns = require('derby/node_modules/racer/lib/Model/defaultFns');
 
@@ -138,9 +139,15 @@ function View(views, path, viewName) {
   this.model = views.model.pass({$view: this});
   this.path = path;
   this.segments = path.split('.');
-  this.viewName = viewName;
   this.bundle = true;
-  this.viewFn = this.model.root._namedFns[this.viewName] || defaultFns[this.viewName];
+
+  if(typeof viewName === 'function') {
+    this.viewFn = viewName;
+    this.viewName = uuid.v4();
+  } else {
+    this.viewName = viewName;
+    this.viewFn = this.model.root._namedFns[this.viewName] || defaultFns[this.viewName];
+  }
 
   var segments = ['$views', this.viewName, path.replace(/\./g, '|')];
   // Parent path for all ids for all queries based upon this view 

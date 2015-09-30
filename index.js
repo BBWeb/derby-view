@@ -1,5 +1,5 @@
-var util = require('derby/node_modules/racer/lib/util');
-var defaultFns = require('derby/node_modules/racer/lib/Model/defaultFns');
+var util = require('racer/lib/util');
+var defaultFns = require('racer/lib/Model/defaultFns');
 
 // Before 1.0
 // TODO: Add to proper repo with proper README and so forth

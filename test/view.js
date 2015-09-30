@@ -32,8 +32,8 @@ describe('Derby-View', function() {
     });
   });
 
-  describe('Referencing view', function() {
-    it('empty collection: adds empty view to the model', function() {
+  describe('Referencing', function() {
+    it('referencing without data', function() {
       var model    = (new Model).at('_page');
 
       model.fn('yellowFruits', function(emit, fruit) {
@@ -46,7 +46,7 @@ describe('Derby-View', function() {
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('non-empty collection: adds view containing results to the model', function() {
+    it('referencing with data', function() {
       var model    = (new Model).at('_page');
 
       helper.addData(model); // Add items to collection
@@ -143,17 +143,13 @@ describe('Derby-View', function() {
           emit(fruit.name + '*' + fruit.color + '*' + fruit.amount*2, '_page.fruits.' + fruit.id);
         }
       });
-
-      // Before removing included item
-      var view = model.at('fruits').view('yellowFruits');
-      view.ref('_page.filteredFruits');
-      var expectedFruits = helper.createExpectedResult(model, ['bananaId', 'lemonId']);
-      expect(model.get('filteredFruits')).to.eql(expectedFruits);
       
       model.del('fruits.bananaId'); // Remove included item
             
       // After removing included item
-      expectedFruits = helper.createExpectedResult(model, ['lemonId']);
+      var view = model.at('fruits').view('yellowFruits');
+      view.ref('_page.filteredFruits');
+      var expectedFruits = helper.createExpectedResult(model, ['lemonId']);
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
@@ -167,16 +163,12 @@ describe('Derby-View', function() {
         }
       });
 
-      // Before removing item NOT included in view
-      var view = model.at('fruits').view('yellowFruits');
-      view.ref('_page.filteredFruits');
-      var expectedFruits = helper.createExpectedResult(model, ['bananaId', 'lemonId']);
-      expect(model.get('filteredFruits')).to.eql(expectedFruits);
-
       model.del('fruits.appleId'); // Remove item
 
       // After removing item NOT included in view
-      expectedFruits = helper.createExpectedResult(model, ['bananaId', 'lemonId']);
+      var view = model.at('fruits').view('yellowFruits');
+      view.ref('_page.filteredFruits');
+      var expectedFruits = helper.createExpectedResult(model, ['bananaId', 'lemonId']);
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });    
   }); 
@@ -192,18 +184,12 @@ describe('Derby-View', function() {
         }
       });
 
-      // Before updating item
-      var view = model.at('fruits').view('yellowFruits');
-      view.ref('_page.filteredFruits');
-      var expectedFruits = helper.createExpectedResult(model, ['bananaId', 'lemonId']);
-      expect(model.get('filteredFruits')).to.eql(expectedFruits);
-
       model.set('fruits.appleId.color', 'yellow');  // Update item
 
       // After updating, item is now included in the view
-      view = model.at('fruits').view('yellowFruits');
+      var view = model.at('fruits').view('yellowFruits');
       view.ref('_page.filteredFruits');
-      expectedFruits = helper.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId']);
+      var expectedFruits = helper.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId']);
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
@@ -216,17 +202,11 @@ describe('Derby-View', function() {
           emit(fruit.name + '*' + fruit.color + '*' + fruit.amount*2, '_page.fruits.' + fruit.id);
         }
       });
-
-      // Before updating item included in view
-      var view = model.at('fruits').view('yellowFruits');
-      view.ref('_page.filteredFruits');
-      var expectedFruits = helper.createExpectedResult(model, ['bananaId', 'lemonId']);
-      expect(model.get('filteredFruits')).to.eql(expectedFruits);
      
       model.set('fruits.bananaId.color', 'green'); // Update item
 
       // After updating the item, it is now excluded from the view
-      view = model.at('fruits').view('yellowFruits');
+      var view = model.at('fruits').view('yellowFruits');
       view.ref('_page.filteredFruits');
       var expectedFruits = helper.createExpectedResult(model, ['lemonId']);
       expect(model.get('filteredFruits')).to.eql(expectedFruits);

@@ -202,6 +202,59 @@ describe('Derby-View', function() {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });    
   });
+
+  describe('Passing in only "key" argument to emit()', function() {
+    it('empty collection: function declared on model.fn()', function() {
+      var model          =  modelCreator.setupModel(); 
+      var collectionName =  'fruits';
+      var functionName   =  modelCreator.addFunctionWithOnlyKey(model, collectionName); // Add a function and return it's name
+      var view           =  model.at(collectionName).view(functionName); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      expect(model.get('filteredFruits')).to.be.empty();
+    });
+
+    it('empty collection: function NOT declared on model.fn()', function() {
+      var model          =  modelCreator.setupModel();
+      var collectionName =  'fruits';
+
+      function commonFn(emit, fruit) { // function declaration
+        if (fruit.color === 'yellow') {
+          emit(fruit.name + '*' + fruit.color);
+        }
+      };
+      var view = model.at(collectionName).view(commonFn); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      expect(model.get('filteredFruits')).to.be.empty();
+    });
+
+    it('non-empty collection: function declared on model.fn()', function() {
+      var model          =  modelCreator.setupModel(); 
+      var collectionName =  'fruits';
+      var functionName   =  modelCreator.addFunctionWithOnlyKey(model, collectionName); // Add a function and return it's name
+
+      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      var view =  model.at(collectionName).view(functionName); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });
+
+    it('non-empty collection: function NOT declared on model.fn()', function() {
+      var model          =  modelCreator.setupModel();
+      var collectionName =  'fruits';
+
+      function commonFn(emit, fruit) { // function declaration
+        if (fruit.color === 'yellow') {
+          emit(fruit.name + '*' + fruit.color);
+        }
+      };
+      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      var view = model.at(collectionName).view(commonFn); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });
+  });
 });
 
 describe('Derby-View: Events', function() {

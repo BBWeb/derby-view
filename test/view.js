@@ -3,10 +3,12 @@ var helperFns     = require('./helperFns');
 var modelCreator  = require('./modelCreator');
 var _             = require('lodash');
 
+// Sample data
 var fruits = [ {name: 'apple',  color: 'red',    amount: 5,  id: 'appleId'},
                {name: 'orange', color: 'orange', amount: 10, id: 'orangeId'},
                {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'},
                {name: 'lemon',  color: 'yellow', amount: 20, id: 'lemonId'}];
+
 
 describe('Derby-View', function() {
   describe('Setting up view', function() {
@@ -32,7 +34,7 @@ describe('Derby-View', function() {
   });
 
   describe('Referencing', function() {
-    it('without data', function() {
+    it('empty collection', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
@@ -42,7 +44,7 @@ describe('Derby-View', function() {
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('with data', function() {
+    it('non-empty collection', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
@@ -167,33 +169,39 @@ describe('Derby-View', function() {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
-});
 
-describe('Passing in functions NOT defined on model.fn', function() {
- it('Behaves as expected', function() {
-    var model          =  modelCreator.setupModel();
-    var collectionName =  'fruits';
-    var functionName   =  modelCreator.addFunction(model, collectionName);
+  describe('Passing in functions NOT defined on model.fn()', function() {
+    it('empty collection', function() {
+      var model          =  modelCreator.setupModel();
+      var collectionName =  'fruits';
 
-    /*var commonFn = function(emit, fruit) { // function declaration
-      if (fruit.color === 'yellow') {
-        emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
-      }
-    };*/
+      function commonFn(emit, fruit) { // function declaration
+        if (fruit.color === 'yellow') {
+          emit(fruit.name + '*' + fruit.color, '_page.' + collectionName + '.' + fruit.id);
+        }
+      };
+      var view = model.at(collectionName).view(commonFn); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      expect(model.get('filteredFruits')).to.be.empty();
+    });
 
-    function commonFn(emit, fruit) { // function declaration
-      if (fruit.color === 'yellow') {
-        emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
-      }
-    };
+    it('non-empty collection', function() {
+      var model          =  modelCreator.setupModel();
+      var collectionName =  'fruits';
 
-    modelCreator.addData(model, collectionName, fruits); // Add items to collection
-    var view = model.at(collectionName).view(commonFn); // Create view
-    //var view = model.at(collectionName).view(functionName);
-    console.log(view);
-   // view.ref('_page.filteredFruits'); // Reference view
-    //console.log(model.get('filteredFruits'));
- });
+      function commonFn(emit, fruit) { // function declaration
+        if (fruit.color === 'yellow') {
+          emit(fruit.name + '*' + fruit.color, '_page.' + collectionName + '.' + fruit.id);
+        }
+      };
+
+      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      var view = model.at(collectionName).view(commonFn); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });    
+  });
 });
 
 describe('Derby-View: Events', function() {

@@ -15,7 +15,7 @@ describe('Derby-View', function() {
     it('empty collection: returns name of created view', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
       
       var view           =  model.at(collectionName).view(functionName); // Create view with empty collection
       expect(view.viewName).to.equal(functionName);
@@ -24,7 +24,7 @@ describe('Derby-View', function() {
     it('non-empty collection: returns name of created view', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name 
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name 
       
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       
@@ -37,7 +37,7 @@ describe('Derby-View', function() {
     it('empty collection', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // With empty collection
@@ -47,19 +47,19 @@ describe('Derby-View', function() {
     it('non-empty collection', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // With non-empty collection
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
 
   describe('Adding new item to collection', function() {
-    it('empty collection: does NOT add to view as conditions are NOT satisfied', function() {
+    it('empty collection: view remains unchanged', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
@@ -70,48 +70,62 @@ describe('Derby-View', function() {
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('empty colection: adds to view as conditions ARE satisfied', function() {
+    it('empty colection: updates view by adding item', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.add(collectionName, {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}); // Add item to empty collection
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
-    it('non-empty colection: does NOT add to view as conditions are NOT satisfied', function() {
+    it('non-empty colection: view remains unchanged', function() {
       var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
       
       modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection     
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.add(collectionName, {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add new item to non-empty collection
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });  
 
-    it('non-empty colection: adds to view as conditions ARE satisfied', function() {
+    it('non-empty colection: updates view by adding item', function() {
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.add(collectionName, {name: 'mango', color: 'yellow', amount: 15, id: 'mangoId'});  // Add new item to non-empty collection     
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId', 'mangoId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId', 'mangoId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
 
   describe('Removing item from collection', function() {
-    it('removes item from view as it was included', function() {
+    it('view remains unchanged', function() {
+      var clonedFruits   = _.cloneDeep(fruits);
+      var model          =  modelCreator.setupModel();
+      var collectionName =  'fruits';
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+
+      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
+      var view = model.at(collectionName).view(functionName); // Create view
+      view.ref('_page.filteredFruits'); // Reference view
+      model.del(collectionName + '.appleId'); // Remove item
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, false); // Create expected result
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    }); 
+
+    it('updates view by removing item', function() {
       var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
@@ -120,52 +134,38 @@ describe('Derby-View', function() {
       modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection      
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
-      model.del('fruits.bananaId'); // Remove included item           
-      var expectedFruits = helperFns.createExpectedResult(model, ['lemonId'], collectionName); // Create expected result
+      model.del(collectionName + '.bananaId'); // Remove included item           
+      var expectedFruits = helperFns.createExpectedResult(model, ['lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
-
-    it('does NOT make any changes to view as item was NOT included', function() {
-      var clonedFruits   = _.cloneDeep(fruits);
-      var model          =  modelCreator.setupModel();
-      var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
-
-      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
-      var view = model.at(collectionName).view(functionName); // Create view
-      view.ref('_page.filteredFruits'); // Reference view
-      model.del('fruits.appleId'); // Remove item
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
-      expect(model.get('filteredFruits')).to.eql(expectedFruits);
-    });   
   }); 
 
   describe.skip('Updating item in collection', function() {
-    it('adds updated item to view as conditions ARE now satisfied', function() {
+    it('updates view by adding item', function() {
       var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
       
       modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.set(collectionName + '.appleId.color', 'yellow');  // Update item
-      var expectedFruits = helperFns.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
-    it('removes item from view as conditions are NO longer satisfied', function() {
+    it('updates view by removing item', function() {
       var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
      
       modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view      
       model.set(collectionName + '.bananaId.color', 'green'); // Update item
-      var expectedFruits = helperFns.createExpectedResult(model, ['lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
@@ -198,7 +198,7 @@ describe('Derby-View', function() {
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       var view = model.at(collectionName).view(commonFn); // Create view
       view.ref('_page.filteredFruits'); // Reference view
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });    
   });
@@ -207,7 +207,7 @@ describe('Derby-View', function() {
     it('empty collection: function declared on model.fn()', function() {
       var model          =  modelCreator.setupModel(); 
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunctionWithOnlyKey(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunctionWithOnlyKey(model, false); // Add a function and return it's name
       var view           =  model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       expect(model.get('filteredFruits')).to.be.empty();
@@ -230,12 +230,12 @@ describe('Derby-View', function() {
     it('non-empty collection: function declared on model.fn()', function() {
       var model          =  modelCreator.setupModel(); 
       var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunctionWithOnlyKey(model, collectionName); // Add a function and return it's name
+      var functionName   =  modelCreator.addFunctionWithOnlyKey(model, false); // Add a function and return it's name
 
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       var view =  model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
@@ -251,18 +251,138 @@ describe('Derby-View', function() {
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       var view = model.at(collectionName).view(commonFn); // Create view
       view.ref('_page.filteredFruits'); // Reference view
-      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
+      var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, false); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
-});
 
-describe('Derby-View: Events', function() {
+  describe('Multilevel keys', function() {
+    describe('Basic functionality', function() {
+      it('creates and populates view', function() {
+        var model          =  modelCreator.setupModel(); 
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true);
+
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        expect(model.get('filteredFruits')).to.be.empty();
+        modelCreator.addData(model, collectionName, fruits); // Add data      
+        var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+
+      it('works with only "key" argument into emit()', function() {
+        var model          =  modelCreator.setupModel(); 
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true);
+
+        modelCreator.addData(model, collectionName, fruits); // Add data
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+    });
+
+    describe('Adding new item to collection', function() {
+      it('view remains unchanged', function() {
+        var model          =  modelCreator.setupModel(); 
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true);
+
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        model.add(collectionName, {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add new item to empty collection
+        expect(model.get('filteredFruits')).to.be.empty();
+
+        model.add(collectionName, {name: 'apple', color: 'red', amount: 5, id: 'appleId'}); // Add new item to non-empty collection
+        expect(model.get('filteredFruits')).to.be.empty();
+      });
+
+      it('updates view by adding item', function() {
+        var model          =  modelCreator.setupModel(); 
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true);
+
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        model.add(collectionName, {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}); // Add new item to empty collection
+        var expectedFruits = helperFns.createExpectedResult(model, ['bananaId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+
+        model.add(collectionName, {name: 'lemon', color: 'yellow', amount: 10, id: 'lemonId'}); // Add new item to non-empty collection
+        expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });      
+    });
+
+    describe('Removing item from collection', function() {
+      it('view remains unchanged', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
+        var model          =  modelCreator.setupModel();
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function and return it's name
+
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        model.del(collectionName + '.appleId'); // Remove item
+        var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+
+      it.skip('updates view by removing item', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
+        var model          =  modelCreator.setupModel();
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function and return it's name
+    
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection      
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        model.del(collectionName + '.bananaId'); // Remove included item           
+        var expectedFruits = helperFns.createExpectedResult(model, ['lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+    }); 
+
+    describe('Updating item in collection', function() {
+      it.skip('updates view by adding item', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
+        var model          =  modelCreator.setupModel();
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function and return it's name
+        
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view
+        model.set(collectionName + '.appleId.color', 'yellow');  // Update item
+        var expectedFruits = helperFns.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+
+      it.skip('updates view by removing item', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
+        var model          =  modelCreator.setupModel();
+        var collectionName =  'fruits';
+        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function and return it's name
+       
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
+        var view = model.at(collectionName).view(functionName); // Create view
+        view.ref('_page.filteredFruits'); // Reference view      
+        model.set(collectionName + '.bananaId.color', 'green'); // Update item
+        var expectedFruits = helperFns.createExpectedResult(model, ['lemonId'], collectionName, true); // Create expected result
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+    });  
+  });
+
+  describe('Events', function() {
     describe('Adding new item to collection', function() {
       it('View is empty: triggers "change" event', function() {
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+        var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
@@ -277,7 +397,7 @@ describe('Derby-View: Events', function() {
       it('View is NOT empty: triggers "change" event', function() {
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+        var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
@@ -296,10 +416,10 @@ describe('Derby-View: Events', function() {
         var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+        var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
         modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
-        var view = model.at('fruits').view('yellowFruits'); // Create view
+        var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
 
         model.on('change', '**', function (segments, value, previous, passed) { // Set up event listener
@@ -312,7 +432,7 @@ describe('Derby-View: Events', function() {
         var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+        var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
         modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
         var view = model.at(collectionName).view(functionName); // Create view
@@ -346,10 +466,10 @@ describe('Derby-View: Events', function() {
         var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
+        var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
 
         modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
-        var view = model.at(collectionName).view('yellowFruits'); // Create view
+        var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
         model.on('change', '**', function(segments, value, previous, passed) { // Set up event listener
           expect(value).to.equal('yellow');
@@ -359,6 +479,9 @@ describe('Derby-View: Events', function() {
       });
     });
   });
+});
+
+
 
 
 

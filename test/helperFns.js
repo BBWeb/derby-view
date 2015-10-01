@@ -1,15 +1,19 @@
 module.exports = {
   // Returns an object containing key-object pairs for the specified object ids
-  createExpectedResult: function(model, idArray, collectionName) {
+  createExpectedResult: function(model, idArray, collectionName, multiLevel) {
     var result = {};
     var fruitObject;
     var key;
 
     for(var i = 0, len = idArray.length; i < len; i++) {
-      //fruitObject = model.get('fruits.'+ idArray[i]);
       fruitObject = model.get(collectionName + '.'+ idArray[i]);
-      key = fruitObject.name + '*' + fruitObject.color;
-      result[key] = fruitObject;
+      if (multiLevel) {
+        result[fruitObject.name] = {};
+        result[fruitObject.name][fruitObject.color] = fruitObject;
+      } else {
+        key = fruitObject.name + '*' + fruitObject.color;
+        result[key] = fruitObject;
+      }     
     }
     return result;
   }

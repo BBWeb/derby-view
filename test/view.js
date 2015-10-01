@@ -38,7 +38,7 @@ describe('Derby-View', function() {
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
 
       var view = model.at(collectionName).view(functionName); // Create view
-      view.ref('_page.filteredFruits'); // Reference with empty collection
+      view.ref('_page.filteredFruits'); // With empty collection
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
@@ -50,7 +50,7 @@ describe('Derby-View', function() {
       modelCreator.addData(model, collectionName, fruits); // Add items to collection
       
       var view = model.at(collectionName).view(functionName); // Create view
-      view.ref('_page.filteredFruits'); // Reference with non-empty collection
+      view.ref('_page.filteredFruits'); // With non-empty collection
       var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
@@ -81,13 +81,14 @@ describe('Derby-View', function() {
     });
 
     it('non-empty colection: does NOT add to view as conditions are NOT satisfied', function() {
+      var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
-
-      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      
+      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection     
       var view = model.at(collectionName).view(functionName); // Create view
-      view.ref('_page.filteredFruits'); // Refernce view
+      view.ref('_page.filteredFruits'); // Reference view
       model.add(collectionName, {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add new item to non-empty collection
       var expectedFruits = helperFns.createExpectedResult(model, ['bananaId', 'lemonId'], collectionName); // Create expected result
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
@@ -109,11 +110,12 @@ describe('Derby-View', function() {
 
   describe('Removing item from collection', function() {
     it('removes item from view as it was included', function() {
+      var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
   
-      modelCreator.addData(model, collectionName, fruits); // Add items to collection      
+      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection      
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.del('fruits.bananaId'); // Remove included item           
@@ -122,11 +124,12 @@ describe('Derby-View', function() {
     });
 
     it('does NOT make any changes to view as item was NOT included', function() {
+      var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
 
-      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.del('fruits.appleId'); // Remove item
@@ -137,11 +140,12 @@ describe('Derby-View', function() {
 
   describe.skip('Updating item in collection', function() {
     it('adds updated item to view as conditions ARE now satisfied', function() {
+      var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
       
-      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view
       model.set(collectionName + '.appleId.color', 'yellow');  // Update item
@@ -150,12 +154,12 @@ describe('Derby-View', function() {
     });
 
     it('removes item from view as conditions are NO longer satisfied', function() {
-      var fruits         =  _.cloneDeep(fruits);
+      var clonedFruits   = _.cloneDeep(fruits);
       var model          =  modelCreator.setupModel();
       var collectionName =  'fruits';
       var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
      
-      modelCreator.addData(model, collectionName, fruits); // Add items to collection
+      modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
       var view = model.at(collectionName).view(functionName); // Create view
       view.ref('_page.filteredFruits'); // Reference view      
       model.set(collectionName + '.bananaId.color', 'green'); // Update item
@@ -164,6 +168,27 @@ describe('Derby-View', function() {
     });
   });
 });
+
+/*describe('Passing in functions NOT defined on model.fn', function() {
+ it('Behaves as expected', function() {
+    var model          =  modelCreator.setupModel();
+    var collectionName =  'fruits';
+    var functionName   =  modelCreator.addFunction(model, collectionName);
+
+    var commonFn = function(emit, fruit) { // function declaration
+      if (fruit.color === 'yellow') {
+        emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
+      }
+    };
+
+    modelCreator.addData(model, collectionName, fruits); // Add items to collection
+    var view = model.at(collectionName).view(commonFn); // Create view
+    //var view = model.at(collectionName).view(functionName);
+    console.log(view);
+   // view.ref('_page.filteredFruits'); // Reference view
+    //console.log(model.get('filteredFruits'));
+ });
+});*/
 
 describe('Derby-View: Events', function() {
     describe('Adding new item to collection', function() {
@@ -201,11 +226,12 @@ describe('Derby-View: Events', function() {
 
     describe('Removing item from collection', function() {
       it('Item included in view: triggers "change" event', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
         var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
 
-        modelCreator.addData(model, collectionName, fruits); // Add items to collection  
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
         var view = model.at('fruits').view('yellowFruits'); // Create view
         view.ref('_page.filteredFruits'); // Reference view
 
@@ -216,11 +242,12 @@ describe('Derby-View: Events', function() {
       });
 
       it('Item NOT included in view: triggers "change" event', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
         var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
 
-        modelCreator.addData(model, collectionName, fruits); // Add items to collection  
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
 
@@ -233,11 +260,12 @@ describe('Derby-View: Events', function() {
     
     describe('Updating item in collection', function() {
       it('Item included in view: triggers "change" event', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
         var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
 
-        modelCreator.addData(model, collectionName, fruits); // Add items to collection
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
         model.on('change', '**', function (segments, value, previous, passed) {  // Set up event listener
@@ -248,11 +276,12 @@ describe('Derby-View: Events', function() {
       });
 
       it('Item NOT included in view: triggers "change" event', function() {
+        var clonedFruits   = _.cloneDeep(fruits);
         var model          =  modelCreator.setupModel();
         var collectionName =  'fruits';
         var functionName   =  modelCreator.addFunction(model, collectionName); // Add a function and return it's name
 
-        modelCreator.addData(model, collectionName, fruits); // Add items to collection
+        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
         var view = model.at(collectionName).view('yellowFruits'); // Create view
         view.ref('_page.filteredFruits'); // Reference view
         model.on('change', '**', function(segments, value, previous, passed) { // Set up event listener

@@ -169,13 +169,19 @@ describe('Derby-View', function() {
   });
 });
 
-/*describe('Passing in functions NOT defined on model.fn', function() {
+describe('Passing in functions NOT defined on model.fn', function() {
  it('Behaves as expected', function() {
     var model          =  modelCreator.setupModel();
     var collectionName =  'fruits';
     var functionName   =  modelCreator.addFunction(model, collectionName);
 
-    var commonFn = function(emit, fruit) { // function declaration
+    /*var commonFn = function(emit, fruit) { // function declaration
+      if (fruit.color === 'yellow') {
+        emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
+      }
+    };*/
+
+    function commonFn(emit, fruit) { // function declaration
       if (fruit.color === 'yellow') {
         emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
       }
@@ -188,7 +194,7 @@ describe('Derby-View', function() {
    // view.ref('_page.filteredFruits'); // Reference view
     //console.log(model.get('filteredFruits'));
  });
-});*/
+});
 
 describe('Derby-View: Events', function() {
     describe('Adding new item to collection', function() {

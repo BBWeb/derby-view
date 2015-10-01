@@ -12,7 +12,7 @@
   },
    "devDependencies": {
     "expect.js": "~0.3.1",
-    "mocha": "~1.17.1"
+    "mocha": "~1.17.1",
     "uuid": "^2.0.1"
   },
   "author": "cjblomqvist <carl@cjblomqvist.com>",

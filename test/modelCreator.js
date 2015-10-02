@@ -51,6 +51,15 @@ module.exports = {
     for (var i = 0, len = data.length; i < len; i++) {
       model.add(collectionName, data[i]);
     }
+  },
+
+  // Creates and returns a key for the specified object
+  createKey: function(args, multiLevel) {
+    if (multiLevel) { 
+      return;
+    } else {
+      return args.name + '*' + args.color;
+    }
   }
 };
 

@@ -16,6 +16,14 @@ module.exports = {
       }     
     }
     return result;
+  },
+
+  createListenerDataObject: function(path, eventEmitted, args) {
+    var dataObject = {};
+    dataObject['path'] = path;
+    dataObject['eventEmitted'] = eventEmitted;
+    dataObject['args'] = args;
+    return dataObject;
   }
 };
 

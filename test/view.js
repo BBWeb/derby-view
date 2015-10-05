@@ -200,7 +200,7 @@ describe('Model.view', function() {
       });
 
       it('Adds item when adding non-filtered item', function() {
-        var model = helpers.setupModel({fruits: fruits.slice(0, 3)}, fns);
+        var model = setupModel({fruits: fruits.slice(0, 3)});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.add('fruits', {name: 'lemon', color: 'yellow', amount: 10, id: 'lemonId'}); // Add new item to non-empty collection

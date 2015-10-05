@@ -1,5 +1,5 @@
 var expect        = require('expect.js');
-var modelCreator  = helperFns = require('./lib/helpers');
+var helpers  = helpers = require('./lib/helpers');
 var _             = require('lodash');
 
 // Sample data
@@ -13,10 +13,10 @@ describe('Derby-View', function() {
    describe('Events', function() {
       describe('Adding new item to collection', function() {
         it('view remains unchanged: triggers "change" only on the collection', function() {
-          var model          =  modelCreator.setupModel();
+          var model          =  helpers.setupModel();
           var collectionName =  'fruits';
           var viewRef        =  'filteredFruits';
-          var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+          var functionName   =  helpers.addFunction(model, collectionName, false); // Add a function and return it's name
           var index          =  0;
           var listenerData   =  [];
 
@@ -24,7 +24,7 @@ describe('Derby-View', function() {
           view.ref('_page.' + viewRef); // Reference view
 
           model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-           listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+           listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
            index++;
           });
 
@@ -37,10 +37,10 @@ describe('Derby-View', function() {
         });
 
          it('updates view by adding item: triggers "change" on view as well', function() {
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, false); // Add a function and return it's name
             var index          =  0;
             var listenerData   =  [];
 
@@ -48,13 +48,13 @@ describe('Derby-View', function() {
             view.ref('_page.' + viewRef); // Reference view
            
             model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
             });
 
             model.add(collectionName, {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}); // Add new item to empty collection
             expect(listenerData).to.have.length(2);// Confirms the number of times the listener is expected to be triggered (i.e. collection + view in that order).
-            var key = modelCreator.createKey(listenerData[1].args, false); // using index 1 as it contains info about the view (i.e index 0 contains info about the collection.
+            var key = helpers.createKey(listenerData[1].args, false); // using index 1 as it contains info about the view (i.e index 0 contains info about the collection.
             expect(viewRef + '.' + key).to.equal(listenerData[1].path);
             expect('change').to.equal(listenerData[1].eventEmitted);
             expect({name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}).to.eql(listenerData[1].args);
@@ -64,14 +64,14 @@ describe('Derby-View', function() {
       describe('Removing item from collection', function() {
          it('view remains unchanged: triggers "change" only on collection', function() {
             var clonedFruits   = _.cloneDeep(fruits);
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, false); // Add a function and return it's name
             var index          =  0;
             var listenerData   =  [];
 
-            modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
+            helpers.addData(model, collectionName, clonedFruits); // Add items to collection  
             var view = model.at(collectionName).view(functionName); // Create view
             view.ref('_page.' + viewRef); // Reference view
 
@@ -80,7 +80,7 @@ describe('Derby-View', function() {
                console.log(path);
                console.log(eventEmitted);
                console.log(args);*/
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
             });         
             model.del(collectionName + '.appleId');  // Remove item NOT included in view
@@ -92,20 +92,20 @@ describe('Derby-View', function() {
 
          it.skip('updates view by removing item: triggers "change" on view as well', function() {
             var clonedFruits   = _.cloneDeep(fruits);
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, false); // Add a function and return it's name
             var index          =  0;
             var listenerData   =  [];
 
-            modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
+            helpers.addData(model, collectionName, clonedFruits); // Add items to collection  
             var view = model.at(collectionName).view(functionName); // Create view
             view.ref('_page.filteredFruits'); // Reference view
 
             // triggers first for view, then for collection and then again for view! Is this correct?
             model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
             });        
             model.del(collectionName + '.bananaId'); // Remove item included in view
@@ -121,19 +121,19 @@ describe('Derby-View', function() {
          // What should the order be?? View first and then collection or vice versa?
          it.skip('updates view by adding item: triggers "change" on view as well', function() {
             var clonedFruits   =  _.cloneDeep(fruits);
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, false); // Add a function and return it's name
             var index          =  0;
             var listenerData   =  [];
 
-            modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
-            var key = modelCreator.createKey(model.get(collectionName + '.appleId'), false); // Create key for this item as it is the item being updated
+            helpers.addData(model, collectionName, clonedFruits); // Add items to collection
+            var key = helpers.createKey(model.get(collectionName + '.appleId'), false); // Create key for this item as it is the item being updated
             var view = model.at(collectionName).view(functionName); // Create view
             view.ref('_page.' + viewRef); // Reference view
             model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
             });  
             model.set(collectionName + '.appleId.color', 'yellow');  // Update item
@@ -147,21 +147,21 @@ describe('Derby-View', function() {
 
          it.skip('updates view by removing item: triggers "change" on view as well', function() {
             var clonedFruits   =  _.cloneDeep(fruits);
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, false); // Add a function and return it's name
             var index          =  0;
             var listenerData   =  [];
 
-            modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
-            var key = modelCreator.createKey(model.get(collectionName + '.bananaId'), false); // Create key for this item as it is the item being updated
+            helpers.addData(model, collectionName, clonedFruits); // Add items to collection
+            var key = helpers.createKey(model.get(collectionName + '.bananaId'), false); // Create key for this item as it is the item being updated
             var view = model.at(collectionName).view(functionName); // Create view
             view.ref('_page.' + viewRef); // Reference view
            
             // triggers first for view, then for collection. Is the order correct?
             model.on('all', '**', function (path, eventEmitted, args, passed) {  // Set up event listener
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
             });    
             model.set(collectionName + '.bananaId.color', 'green'); // Update item
@@ -179,10 +179,10 @@ describe('Derby-View', function() {
    describe('Events - Multilevel Keys', function() {
       describe('Adding new item to collection', function() {
          it('view remains unchanged: triggers "change" only on the collection', function() {
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, true); // Add a function and return it's name
             var index          =  0;
             var listenerData   =  [];
 
@@ -190,7 +190,7 @@ describe('Derby-View', function() {
             view.ref('_page.' + viewRef); // Reference view
 
             model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
             });
 
@@ -202,10 +202,10 @@ describe('Derby-View', function() {
          });
 
          it.skip('updates view by adding item: triggers "change" on view as well', function() {
-            var model          =  modelCreator.setupModel();
+            var model          =  helpers.setupModel();
             var collectionName =  'fruits';
             var viewRef        =  'filteredFruits';
-            var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
+            var functionName   =  helpers.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
             var index          =  0;
             var listenerData   =  [];
 
@@ -213,7 +213,7 @@ describe('Derby-View', function() {
            view.ref('_page.' + viewRef); // Reference view
            
             model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-               listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+               listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
                index++;
                /*console.log(path);
                console.log(eventEmitted);
@@ -222,7 +222,7 @@ describe('Derby-View', function() {
 
             model.add(collectionName, {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}); // Add new item to empty collection
             expect(listenerData).to.have.length(2);// Confirms the number of times the listener is expected to be triggered (i.e. collection + view in that order).
-            var key = modelCreator.createKey(listenerData[1].args, false); // using index 1 as it contains info about the view (i.e index 0 contains info about the collection.
+            var key = helpers.createKey(listenerData[1].args, false); // using index 1 as it contains info about the view (i.e index 0 contains info about the collection.
             expect(viewRef + '.' + key).to.equal(listenerData[1].path);
             expect('change').to.equal(listenerData[1].eventEmitted);
             expect({name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}).to.eql(listenerData[1].args);
@@ -248,19 +248,19 @@ describe('Derby-View', function() {
     describe('Removing item from collection', function() {
       it('view remains unchanged: triggers "change" only on collection', function() {
         var clonedFruits   = _.cloneDeep(fruits);
-        var model          =  modelCreator.setupModel();
+        var model          =  helpers.setupModel();
         var collectionName =  'fruits';
         var viewRef        =  'filteredFruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
+        var functionName   =  helpers.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
         var index          =  0;
         var listenerData   =  [];
 
-        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
+        helpers.addData(model, collectionName, clonedFruits); // Add items to collection  
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.' + viewRef); // Reference view
 
         model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-          listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+          listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
           index++;
         });
 
@@ -273,20 +273,20 @@ describe('Derby-View', function() {
 
       it.skip('updates view by removing item: triggers "change" on view as well', function() {
         var clonedFruits   = _.cloneDeep(fruits);
-        var model          =  modelCreator.setupModel();
+        var model          =  helpers.setupModel();
         var collectionName =  'fruits';
         var viewRef        =  'filteredFruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
+        var functionName   =  helpers.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
         var index          =  0;
         var listenerData   =  [];
 
-        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection  
+        helpers.addData(model, collectionName, clonedFruits); // Add items to collection  
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.filteredFruits'); // Reference view
 
         // triggers first for view, then for collection and then again for view! Is this correct?
         model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-          listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+          listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
           index++;
           /*console.log(path);
           console.log(eventEmitted);
@@ -323,19 +323,19 @@ describe('Derby-View', function() {
       // What should the order be?? View first and then collection or vice versa?
       it.skip('updates view by adding item: triggers "change" on view as well', function() {
         var clonedFruits   =  _.cloneDeep(fruits);
-        var model          =  modelCreator.setupModel();
+        var model          =  helpers.setupModel();
         var collectionName =  'fruits';
         var viewRef        =  'filteredFruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
+        var functionName   =  helpers.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
         var index          =  0;
         var listenerData   =  [];
 
-        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
-        var key = modelCreator.createKey(model.get(collectionName + '.appleId'), false); // Create key for this item as it is the item being updated
+        helpers.addData(model, collectionName, clonedFruits); // Add items to collection
+        var key = helpers.createKey(model.get(collectionName + '.appleId'), false); // Create key for this item as it is the item being updated
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.' + viewRef); // Reference view
         model.on('all', '**', function (path, eventEmitted, args, passed) { // Set up event listener
-          listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+          listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
           index++;
           /*console.log(path);
           console.log(eventEmitted);
@@ -353,21 +353,21 @@ describe('Derby-View', function() {
 
       it.skip('updates view by removing item: triggers "change" on view as well', function() {
         var clonedFruits   =  _.cloneDeep(fruits);
-        var model          =  modelCreator.setupModel();
+        var model          =  helpers.setupModel();
         var collectionName =  'fruits';
         var viewRef        =  'filteredFruits';
-        var functionName   =  modelCreator.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
+        var functionName   =  helpers.addFunction(model, collectionName, true); // Add a function (with a multi-level key) and return it's name
         var index          =  0;
         var listenerData   =  [];
 
-        modelCreator.addData(model, collectionName, clonedFruits); // Add items to collection
-        var key = modelCreator.createKey(model.get(collectionName + '.bananaId'), false); // Create key for this item as it is the item being updated
+        helpers.addData(model, collectionName, clonedFruits); // Add items to collection
+        var key = helpers.createKey(model.get(collectionName + '.bananaId'), false); // Create key for this item as it is the item being updated
         var view = model.at(collectionName).view(functionName); // Create view
         view.ref('_page.' + viewRef); // Reference view
         
         // triggers first for view, then for collection. Is the order correct?
         model.on('all', '**', function (path, eventEmitted, args, passed) {  // Set up event listener
-          listenerData[index] = helperFns.createListenerDataObject(path, eventEmitted, args);
+          listenerData[index] = helpers.createListenerDataObject(path, eventEmitted, args);
           index++;
           /*console.log(path);
           console.log(eventEmitted);

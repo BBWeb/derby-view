@@ -179,7 +179,7 @@ describe('Model.view', function() {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it('works with only "key" argument into emit()', function() {
+      it('Works with only "key" argument into emit()', function() {
         var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');

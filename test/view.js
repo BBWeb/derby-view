@@ -232,7 +232,7 @@ describe('Model.view', function() {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
-        model.set('fruits.appleId.color', 'yellow');  // Update item
+        model.set('fruits.appleId.color', 'yellow');
         var expectedFruits = model.expectedResult({fruits: ['appleId', 'bananaId', 'lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
@@ -241,7 +241,7 @@ describe('Model.view', function() {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');      
-        model.set('fruits' + '.bananaId.color', 'green'); // Update item
+        model.set('fruits' + '.bananaId.color', 'green');
         var expectedFruits = model.expectedResult({fruits: ['lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });

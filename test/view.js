@@ -59,8 +59,7 @@ describe('Model.view', function() {
 
   describe('Adding items to non-empty collection', function() {
     it('Returns original data with filtered item', function() {
-      var clonedFruits   = _.cloneDeep(fruits);
-      var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add new item to non-empty collection
@@ -80,8 +79,7 @@ describe('Model.view', function() {
 
   describe('Removing item from collection', function() {
     it('Returns unchanged when item is not emitted', function() {
-      var clonedFruits   = _.cloneDeep(fruits);
-      var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.del('fruits.appleId'); // Remove item
@@ -90,8 +88,7 @@ describe('Model.view', function() {
     }); 
 
     it('Returns updated view when item was previously emitted', function() {
-      var clonedFruits   = _.cloneDeep(fruits);
-      var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.del('fruits' + '.bananaId'); // Remove included item           
@@ -102,8 +99,7 @@ describe('Model.view', function() {
 
   describe.skip('Updating item in collection', function() {
     it('Returns new item when change previously did not cause emit but now do', function() {
-      var clonedFruits   = _.cloneDeep(fruits);
-      var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.set('fruits.appleId.color', 'yellow');  // Update item
@@ -112,8 +108,7 @@ describe('Model.view', function() {
     });
 
     it('Returns without item when change previosuly caused emit but no longer does', function() {
-      var clonedFruits   = _.cloneDeep(fruits);
-      var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
       model.set('fruits' + '.bananaId.color', 'green'); // Update item
@@ -226,8 +221,7 @@ describe('Model.view', function() {
 
     describe('Removing item from collection', function() {
       it('view remains unchanged', function() {
-        var clonedFruits   = _.cloneDeep(fruits);
-        var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
 
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -237,8 +231,7 @@ describe('Model.view', function() {
       });
 
       it.skip('updates view by removing item', function() {
-        var clonedFruits   = _.cloneDeep(fruits);
-        var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.del('fruits.bananaId'); // Remove included item           
@@ -249,8 +242,7 @@ describe('Model.view', function() {
 
     describe('Updating item in collection', function() {
       it.skip('updates view by adding item', function() {
-        var clonedFruits   = _.cloneDeep(fruits);
-        var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.set('fruits.appleId.color', 'yellow');  // Update item
@@ -259,8 +251,7 @@ describe('Model.view', function() {
       });
 
       it.skip('updates view by removing item', function() {
-        var clonedFruits   = _.cloneDeep(fruits);
-        var model          =  helpers.setupModel({fruits: clonedFruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model          =  helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');      
         model.set('fruits' + '.bananaId.color', 'green'); // Update item

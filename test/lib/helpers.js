@@ -12,7 +12,7 @@ module.exports = {
     if(collections) {
       _.each(collections, function (collection, name) {
         _.each(collection, function (doc, key) {
-          model.add(name, doc);
+          model.add(name, _.cloneDeep(doc));
         });
       });
     }

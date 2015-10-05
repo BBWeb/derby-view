@@ -1,36 +1,9 @@
 var expect        = require('expect.js');
-var helpers       = require('./lib/helpers');
 var _             = require('lodash');
-
-// Sample data
-var fruits = [ {name: 'apple',  color: 'red',    amount: 5,  id: 'appleId'},
-               {name: 'orange', color: 'orange', amount: 10, id: 'orangeId'},
-               {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'},
-               {name: 'lemon',  color: 'yellow', amount: 20, id: 'lemonId'}];
-
-// Sample view fns
-var fns = {
-  yellowFruits: function (emit, fruit) {
-    if (fruit.color === 'yellow') {
-      emit(fruit.name + '*' + fruit.color);
-    }
-  },
-  yellowFruitsMultilevel: function (emit, fruit) {
-    if (fruit.color === 'yellow') {
-      emit(fruit.name + '.' + fruit.color);
-    }
-  },
-  yellowFruitsWithPath: function (emit, fruit) {
-    if (fruit.color === 'yellow') {
-      emit(fruit.name + '*' + fruit.color, '_page.fruits.' + fruit.id);
-    }
-  },
-  yellowFruitsMultilevelWithPath: function (emit, fruit) {
-    if (fruit.color === 'yellow') {
-      emit(fruit.name + '.' + fruit.color, '_page.fruits.' + fruit.id);
-    }
-  }
-};
+var helpers       = require('./lib/helpers');
+var sampleData    = require('./lib/sampleData');
+var fruits        = sampleData.fruits;
+var fns           = sampleData.fns;
 
 describe('Model.view', function() {
   describe('Setup', function() {

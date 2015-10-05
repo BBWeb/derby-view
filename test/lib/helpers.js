@@ -50,25 +50,6 @@ module.exports = {
     return functionName;
   },
 
-  // Adds a function which only emits the 'key' argument (i.e. does not include the pathName)
-  addFunctionWithOnlyKey: function(model, multiLevel) {
-    var functionName = 'yellowFruits';
-    var keySeparator;
-    
-    if (multiLevel) {
-      keySeparator = '.';
-    } else {
-      keySeparator = '*';
-    }
-
-    model.fn(functionName, function(emit, fruit) {
-      if (fruit.color === 'yellow') {
-        emit(fruit.name + keySeparator + fruit.color);        
-      }
-    }); 
-    return functionName;
-  },
-
   // Adds data to the model
   // TODO: Remove in favor of new helper fn
   addData: function(model, collectionName, data) {
@@ -84,45 +65,6 @@ module.exports = {
     } else {
       return args.name + '*' + args.color;
     }
-  },
-
-  // Returns an object containing key-object pairs for the specified object ids
-  createExpectedResult: function(model, idArray, collectionName, multiLevel) {
-    var result = {};
-    var fruitObject;
-    var key;
-
-    for(var i = 0, len = idArray.length; i < len; i++) {
-      fruitObject = model.get(collectionName + '.'+ idArray[i]);
-      if (multiLevel) {
-        result[fruitObject.name] = {};
-        result[fruitObject.name][fruitObject.color] = fruitObject;
-      } else {
-        key = fruitObject.name + '*' + fruitObject.color;
-        result[key] = fruitObject;
-      }     
-    }
-    return result;
-  },
-
-  getExpectedResult: function (model, defaultFn) {
-    // TODO: Currently only supporting one collection passed along, need to update tests as well though if/when reworking
-    function expectedResult(collections, fn) {
-      var result = {};
-      var fn = fn || defaultFn;
-
-      _.each(collections, function (ids, collectionName) {
-        for(var i = 0, len = ids.length; i < len; i++) {
-          var id = ids[i];
-          var doc = model.get(collectionName + '.' + id);
-          var key = fn(doc);
-
-          set(result, key, doc);
-        }
-      });
-    }
-
-    return expectedResult;
   },
 
   createListenerDataObject: function(path, eventEmitted, args) {

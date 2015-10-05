@@ -196,6 +196,7 @@ function set(obj, path, data) {
     var segment = splittedPath[i];
 
     obj[segment] = obj[segment] || {};
+    obj = obj[segment];
   }
 
   var segment = splittedPath.pop();

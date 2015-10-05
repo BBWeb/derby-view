@@ -52,7 +52,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'});
-      var expectedFruits = helpers.createExpectedResult(model, ['bananaId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['bananaId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
@@ -63,7 +63,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'});
-      var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });  
 
@@ -72,7 +72,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'mango', color: 'yellow', amount: 15, id: 'mangoId'});
-      var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId', 'mangoId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId', 'mangoId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
@@ -83,7 +83,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.del('fruits.appleId');
-      var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     }); 
 
@@ -92,7 +92,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.del('fruits' + '.bananaId');
-      var expectedFruits = helpers.createExpectedResult(model, ['lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   }); 
@@ -103,7 +103,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.set('fruits.appleId.color', 'yellow');
-      var expectedFruits = helpers.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['appleId', 'bananaId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
@@ -112,7 +112,7 @@ describe('Model.view', function() {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
       model.set('fruits' + '.bananaId.color', 'green');
-      var expectedFruits = helpers.createExpectedResult(model, ['lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
@@ -129,7 +129,7 @@ describe('Model.view', function() {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view(fns['yellowFruitsWithPath']);
       view.ref('_page.filteredFruits');
-      var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });    
   });
@@ -146,8 +146,7 @@ describe('Model.view', function() {
       it('Returns data when non-empty collection', function() {
         var model = setupModel({fruits: fruits}); 
         var view =  model.at('fruits').view('yellowFruits');
-        view.ref('_page.filteredFruits');
-        var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
+        view.ref('_page.filteredFruits');var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });
@@ -164,7 +163,7 @@ describe('Model.view', function() {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view(fns['yellowFruits']);
         view.ref('_page.filteredFruits');
-        var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });
@@ -176,7 +175,7 @@ describe('Model.view', function() {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
-        var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
@@ -184,7 +183,7 @@ describe('Model.view', function() {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
-        var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });
@@ -203,7 +202,7 @@ describe('Model.view', function() {
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.add('fruits', {name: 'lemon', color: 'yellow', amount: 10, id: 'lemonId'});
-        expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });      
     });
@@ -214,7 +213,7 @@ describe('Model.view', function() {
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.del('fruits.appleId');
-        var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
@@ -223,7 +222,7 @@ describe('Model.view', function() {
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.del('fruits.bananaId');
-        var expectedFruits = helpers.createExpectedResult(model, ['lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     }); 
@@ -234,7 +233,7 @@ describe('Model.view', function() {
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.set('fruits.appleId.color', 'yellow');  // Update item
-        var expectedFruits = helpers.createExpectedResult(model, ['appleId', 'bananaId', 'lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['appleId', 'bananaId', 'lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
@@ -243,7 +242,7 @@ describe('Model.view', function() {
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');      
         model.set('fruits' + '.bananaId.color', 'green'); // Update item
-        var expectedFruits = helpers.createExpectedResult(model, ['lemonId'], 'fruits', true);
+        var expectedFruits = model.expectedResult({fruits: ['lemonId']}, '.');
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });  

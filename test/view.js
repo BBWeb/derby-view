@@ -70,7 +70,7 @@ describe('Derby-View', function() {
       var model          =  modelCreator.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view           =  model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
-      model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add item to empty collection  
+      model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'});  
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
@@ -79,7 +79,7 @@ describe('Derby-View', function() {
 
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
-      model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}); // Add item to empty collection
+      model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'});
       var expectedFruits = helperFns.createExpectedResult(model, ['bananaId'], 'fruits', false);
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });

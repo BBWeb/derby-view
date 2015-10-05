@@ -250,4 +250,3 @@ describe('Model.view', function() {
     });  
   });  
 });
-

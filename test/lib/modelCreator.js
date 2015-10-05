@@ -1,14 +1,22 @@
+var _         = require('lodash');
 var Model     = require('racer/lib/Model');
 require('./../../index.js')({Model: Model});
 
 module.exports = {
   // Create model and possibly set it up with some data and fn
-  setupModel: function(data, fnName, fn) {
+  setupModel: function(collections, fnName, fn) {
     var fnName = fnName || 'default';
 
     var model = (new Model).at('_page');
 
-    if(data) model.add(data);
+    if(collections) {
+      _.each(collections, function (collection, name) {
+        _.each(collection, function (doc, key) {
+          model.add(name, doc);
+        });
+      });
+    }
+
     if(fnName && fn) model.fn(fnName, fn);
 
     return model;

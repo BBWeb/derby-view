@@ -11,38 +11,38 @@ module.exports = {
   addFunction: function(model, collectionName, multiLevel) {
     var functionName	= 'yellowFruits';
     var pathName 	 	= '_page.' + collectionName + '.';
-    if (multiLevel) { // creates a multi-level key because of the (.)
-      model.fn(functionName, function(emit, fruit) {
-        if (fruit.color === 'yellow') {
-          emit(fruit.name + '.' + fruit.color, pathName + fruit.id);
-        }
-      });      
+    var keySeparator;
+    
+    if (multiLevel) {
+      keySeparator = '.';
     } else {
-      model.fn(functionName, function(emit, fruit) {
-        if (fruit.color === 'yellow') {
-          emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
-        }
-      });
-    }   
+      keySeparator = '*';
+    }
+
+    model.fn(functionName, function(emit, fruit) {
+      if (fruit.color === 'yellow') {
+        emit(fruit.name + keySeparator + fruit.color, pathName + fruit.id);
+      }
+    });
     return functionName;
   },
 
   // Adds a function which only emits the 'key' argument (i.e. does not include the pathName)
   addFunctionWithOnlyKey: function(model, multiLevel) {
     var functionName = 'yellowFruits';
-    if(multiLevel) { // creates a multi-level key because of the (.)
-      model.fn(functionName, function(emit, fruit) {
-        if (fruit.color === 'yellow') {
-            emit(fruit.name + '.' + fruit.color);        
-        }
-      });
+    var keySeparator;
+    
+    if (multiLevel) {
+      keySeparator = '.';
     } else {
-      model.fn(functionName, function(emit, fruit) {
-        if (fruit.color === 'yellow') {
-          emit(fruit.name + '*' + fruit.color);
-        }
-      }); 
-    }   
+      keySeparator = '*';
+    }
+
+    model.fn(functionName, function(emit, fruit) {
+      if (fruit.color === 'yellow') {
+        emit(fruit.name + keySeparator + fruit.color);        
+      }
+    }); 
     return functionName;
   },
 
@@ -62,5 +62,6 @@ module.exports = {
     }
   }
 };
+
 
 

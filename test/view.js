@@ -1,6 +1,5 @@
 var expect        = require('expect.js');
-var helperFns     = require('./lib/helperFns');
-var modelCreator  = require('./lib/modelCreator');
+var modelCreator  = helperFns = require('./lib/modelCreator');
 var _             = require('lodash');
 
 // Sample data

@@ -1,5 +1,5 @@
 var Model     = require('racer/lib/Model');
-require('../index.js')({Model: Model});
+require('./../../index.js')({Model: Model});
 
 module.exports = {
   // Creates model 

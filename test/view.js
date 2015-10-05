@@ -46,7 +46,7 @@ describe('Model.view', function() {
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('Returns updated view with non-filtered item', function() {
+    it('Returns new item with non-filtered item', function() {
       var model = helpers.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -171,7 +171,7 @@ describe('Model.view', function() {
 
   describe('Multilevel keys', function() {
     describe('Basic functionality', function() {
-      it('Returns data', function() {
+      it('Returns data properly structured', function() {
         var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -199,12 +199,9 @@ describe('Model.view', function() {
       });
 
       it('Adds item when adding non-filtered item', function() {
-        var model = helpers.setupModel(null, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits.slice(0, 3)}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
-        model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}); // Add new item to empty collection
-        var expectedFruits = helpers.createExpectedResult(model, ['bananaId'], 'fruits', true);
-        expect(model.get('filteredFruits')).to.eql(expectedFruits);
         model.add('fruits', {name: 'lemon', color: 'yellow', amount: 10, id: 'lemonId'}); // Add new item to non-empty collection
         expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
         expect(model.get('filteredFruits')).to.eql(expectedFruits);

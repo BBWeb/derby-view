@@ -36,10 +36,7 @@ describe('Derby-View', function() {
   describe('Setting up view', function() {
     it('empty collection: returns name of created view', function() {
       var model          =  modelCreator.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
-
-      // Create view with empty collection
       var view           =  model.at('fruits').view('yellowFruitsWithPath'); 
-
       expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
 

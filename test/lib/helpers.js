@@ -3,6 +3,30 @@ var Model     = require('racer/lib/Model');
 require('./../../index.js')({Model: Model});
 
 module.exports = {
+  getModelSetup: function (fns) {
+    function setupModel(collections) {
+      var model = (new Model).at('_page');
+
+      if(collections) {
+        _.each(collections, function (collection, name) {
+          _.each(collection, function (doc, key) {
+            model.add(name, _.cloneDeep(doc));
+          });
+        });
+      }
+
+      if(fns) {
+        _.each(fns, function (fn, name) {
+          model.fn(name, fn);
+        });
+      }
+
+      return model;
+    }
+
+    return setupModel;
+  },
+
   // Create model and possibly set it up with some data and fn
   setupModel: function(collections, fns) {
     var fnName = fnName || 'default';

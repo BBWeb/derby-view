@@ -4,7 +4,7 @@ var sampleData    = require('./lib/sampleData');
 var fruits        = sampleData.fruits;
 var fns           = sampleData.fns;
 var helpers       = require('./lib/helpers');
-var setupModel    = helpers.getModelSetup(fns);
+var setupModel    = helpers.getModelSetup(fns, '*', ['name', 'color']);
 
 describe('Model.view', function() {
   describe('Setup', function() {
@@ -33,7 +33,7 @@ describe('Model.view', function() {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
-      var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });

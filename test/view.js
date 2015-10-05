@@ -171,12 +171,10 @@ describe('Model.view', function() {
 
   describe('Multilevel keys', function() {
     describe('Basic functionality', function() {
-      it('creates and populates view', function() {
-        var model = helpers.setupModel(null, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+      it('Returns data', function() {
+        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
-        expect(model.get('filteredFruits')).to.be.empty();
-        helpers.addData(model, 'fruits', fruits); // Add data      
         var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });

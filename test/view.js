@@ -9,6 +9,7 @@ var fruits = [ {name: 'apple',  color: 'red',    amount: 5,  id: 'appleId'},
                {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'},
                {name: 'lemon',  color: 'yellow', amount: 20, id: 'lemonId'}];
 
+// Sample view fns
 var fns = {
   yellowFruits: function (emit, fruit) {
     if (fruit.color === 'yellow') {

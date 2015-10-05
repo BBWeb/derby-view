@@ -3,50 +3,10 @@ var Model     = require('racer/lib/Model');
 require('./../../index.js')({Model: Model});
 
 module.exports = {
-  getModelSetup: function (modelFns, defaultSeparator, defaultProperties) {
-    function setupModel(collections) {
-      var model = (new Model).at('_page');
-
-      if(collections) {
-        _.each(collections, function (collection, name) {
-          _.each(collection, function (doc, key) {
-            model.add(name, _.cloneDeep(doc));
-          });
-        });
-      }
-
-      if(modelFns) {
-        _.each(modelFns, function (fn, name) {
-          model.fn(name, fn);
-        });
-      }
-
-      // TODO: Currently only supporting one collection passed along, need to update tests as well though if/when reworking
-      model.expectedResult = function (collections, separator, properties) {
-        var result = {};
-        var separator = separator || defaultSeparator;
-        var properties = properties || defaultProperties;
-
-        _.each(collections, function (ids, collectionName) {
-          for(var i = 0, len = ids.length; i < len; i++) {
-            var id = ids[i];
-            var doc = model.get(collectionName + '.' + id);
-            var key = _getPropertiesAsKey(separator, properties, doc);
-
-            _set(result, key, doc);
-          }
-        });
-
-        return result;
-      };
-
-      return model;
-    }
-
-    return setupModel;
-  },
+  getModelSetup: getModelSetup,
 
   // Create model and possibly set it up with some data and fn
+  // TODO: Remove in favor of new helper fn
   setupModel: function(collections, fns) {
     var fnName = fnName || 'default';
 
@@ -70,6 +30,7 @@ module.exports = {
   },
 
 	// Adds a function that is to be executed at the specified path. Returns the name of the function.
+  // TODO: Remove in favor of new helper fn
   addFunction: function(model, collectionName, multiLevel) {
     var functionName	= 'yellowFruits';
     var pathName 	 	= '_page.' + collectionName + '.';
@@ -109,6 +70,7 @@ module.exports = {
   },
 
   // Adds data to the model
+  // TODO: Remove in favor of new helper fn
   addData: function(model, collectionName, data) {
     for (var i = 0, len = data.length; i < len; i++) {
       model.add(collectionName, data[i]);
@@ -171,6 +133,49 @@ module.exports = {
     return dataObject;
   }
 };
+
+function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
+  function setupModel(collections) {
+    var model = (new Model).at('_page');
+
+    if(collections) {
+      _.each(collections, function (collection, name) {
+        _.each(collection, function (doc, key) {
+          model.add(name, _.cloneDeep(doc));
+        });
+      });
+    }
+
+    if(modelFns) {
+      _.each(modelFns, function (fn, name) {
+        model.fn(name, fn);
+      });
+    }
+
+    // TODO: Currently only supporting one collection passed along, need to update tests as well though if/when reworking
+    model.expectedResult = function (collections, separator, properties) {
+      var result = {};
+      var separator = separator || defaultSeparator;
+      var properties = properties || defaultProperties;
+
+      _.each(collections, function (ids, collectionName) {
+        for(var i = 0, len = ids.length; i < len; i++) {
+          var id = ids[i];
+          var doc = model.get(collectionName + '.' + id);
+          var key = _getPropertiesAsKey(separator, properties, doc);
+
+          _set(result, key, doc);
+        }
+      });
+
+      return result;
+    };
+
+    return model;
+  }
+
+  return setupModel;
+}
 
 // Gets properties from doc and joins them together into a key
 function _getPropertiesAsKey(separator, properties, doc) {

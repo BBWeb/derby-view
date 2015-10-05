@@ -4,7 +4,7 @@ require('./../../index.js')({Model: Model});
 
 module.exports = {
   // Create model and possibly set it up with some data and fn
-  setupModel: function(collections, fnName, fn) {
+  setupModel: function(collections, fns) {
     var fnName = fnName || 'default';
 
     var model = (new Model).at('_page');
@@ -17,7 +17,11 @@ module.exports = {
       });
     }
 
-    if(fnName && fn) model.fn(fnName, fn);
+    if(fns) {
+      _.each(fns, function (fn, name) {
+        model.fn(name, fn);
+      });
+    }
 
     return model;
   },

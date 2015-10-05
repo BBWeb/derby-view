@@ -8,13 +8,13 @@ var fns           = sampleData.fns;
 describe('Model.view', function() {
   describe('Setup', function() {
     it('Returns name of created view with empty collection', function() {
-      var model = helpers.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel(null, fns);
       var view  = model.at('fruits').view('yellowFruitsWithPath'); 
       expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
 
     it('Returns name of created view with non-empty collection', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view =  model.at('fruits').view('yellowFruitsWithPath');
       expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
@@ -22,14 +22,14 @@ describe('Model.view', function() {
 
   describe('Referencing', function() {
     it('Returns empty on empty collection', function() {
-      var model = helpers.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel(null, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits'); // With empty collection
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
     it('Returns filtered data on non-empty collection', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits'); // With non-empty collection
       var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
@@ -39,7 +39,7 @@ describe('Model.view', function() {
 
   describe('Adding items to empty collection', function() {
     it('Returns empty collection with filtered item', function() {
-      var model = helpers.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel(null, fns);
       var view  = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'});  
@@ -47,7 +47,7 @@ describe('Model.view', function() {
     });
 
     it('Returns new item with non-filtered item', function() {
-      var model = helpers.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel(null, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'});
@@ -58,7 +58,7 @@ describe('Model.view', function() {
 
   describe('Adding items to non-empty collection', function() {
     it('Returns original data with filtered item', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add new item to non-empty collection
@@ -67,7 +67,7 @@ describe('Model.view', function() {
     });  
 
     it('Returns updated view with non-filtered item', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.add('fruits', {name: 'mango', color: 'yellow', amount: 15, id: 'mangoId'});  // Add new item to non-empty collection     
@@ -78,7 +78,7 @@ describe('Model.view', function() {
 
   describe('Removing item from collection', function() {
     it('Returns unchanged when item is not emitted', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.del('fruits.appleId'); // Remove item
@@ -87,7 +87,7 @@ describe('Model.view', function() {
     }); 
 
     it('Returns updated view when item was previously emitted', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.del('fruits' + '.bananaId'); // Remove included item           
@@ -98,7 +98,7 @@ describe('Model.view', function() {
 
   describe.skip('Updating item in collection', function() {
     it('Returns new item when change previously did not cause emit but now do', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.set('fruits.appleId.color', 'yellow');  // Update item
@@ -107,7 +107,7 @@ describe('Model.view', function() {
     });
 
     it('Returns without item when change previosuly caused emit but no longer does', function() {
-      var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+      var model = helpers.setupModel({fruits: fruits}, fns);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
       model.set('fruits' + '.bananaId.color', 'green'); // Update item
@@ -136,14 +136,14 @@ describe('Model.view', function() {
   describe('Passing in only "key" argument to emit()', function() {
     describe('Function declared with model.fn()', function () {
       it('Returns empty when empty collection', function() {
-        var model = helpers.setupModel(null, 'yellowFruits', fns['yellowFruits']);
+        var model = helpers.setupModel(null, fns);
         var view  = model.at('fruits').view('yellowFruits');
         view.ref('_page.filteredFruits');
         expect(model.get('filteredFruits')).to.be.empty();
       });
 
       it('Returns data when non-empty collection', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruits', fns['yellowFruits']); 
+        var model = helpers.setupModel({fruits: fruits}, fns); 
         var view =  model.at('fruits').view('yellowFruits');
         view.ref('_page.filteredFruits');
         var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', false);
@@ -172,7 +172,7 @@ describe('Model.view', function() {
   describe('Multilevel keys', function() {
     describe('Basic functionality', function() {
       it('Returns data properly structured', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
@@ -180,7 +180,7 @@ describe('Model.view', function() {
       });
 
       it('Works with only "key" argument into emit()', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         var expectedFruits = helpers.createExpectedResult(model, ['bananaId', 'lemonId'], 'fruits', true);
@@ -190,7 +190,7 @@ describe('Model.view', function() {
 
     describe('Adding item to collection', function() {
       it('View remains unchanged when adding filtered item', function() {
-        var model = helpers.setupModel(null, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel(null, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'}); // Add new item to empty collection
@@ -199,7 +199,7 @@ describe('Model.view', function() {
       });
 
       it('Adds item when adding non-filtered item', function() {
-        var model = helpers.setupModel({fruits: fruits.slice(0, 3)}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits.slice(0, 3)}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.add('fruits', {name: 'lemon', color: 'yellow', amount: 10, id: 'lemonId'}); // Add new item to non-empty collection
@@ -210,7 +210,7 @@ describe('Model.view', function() {
 
     describe('Removing item from collection', function() {
       it('View remains unchanged when removing filtered item', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.del('fruits.appleId'); // Remove item
@@ -219,7 +219,7 @@ describe('Model.view', function() {
       });
 
       it.skip('Removes item when removing non-filtered item', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.del('fruits.bananaId'); // Remove included item           
@@ -230,7 +230,7 @@ describe('Model.view', function() {
 
     describe('Updating item in collection', function() {
       it.skip('Adds item when it was previously filtered, but no longer is', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
         model.set('fruits.appleId.color', 'yellow');  // Update item
@@ -239,7 +239,7 @@ describe('Model.view', function() {
       });
 
       it.skip('Removes item when it was previously not filtered but now is', function() {
-        var model = helpers.setupModel({fruits: fruits}, 'yellowFruitsMultilevelWithPath', fns['yellowFruitsMultilevelWithPath']);
+        var model = helpers.setupModel({fruits: fruits}, fns);
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');      
         model.set('fruits' + '.bananaId.color', 'green'); // Update item

@@ -31,9 +31,9 @@ module.exports = {
           for(var i = 0, len = ids.length; i < len; i++) {
             var id = ids[i];
             var doc = model.get(collectionName + '.' + id);
-            var key = getPropertiesAsKey(separator, properties, doc);
+            var key = _getPropertiesAsKey(separator, properties, doc);
 
-            set(result, key, doc);
+            _set(result, key, doc);
           }
         });
 
@@ -173,7 +173,7 @@ module.exports = {
 };
 
 // Gets properties from doc and joins them together into a key
-function getPropertiesAsKey(separator, properties, doc) {
+function _getPropertiesAsKey(separator, properties, doc) {
   var keySegments = [];
 
   for(var i = 0, len = properties.length; i < len; i++) {
@@ -187,7 +187,7 @@ function getPropertiesAsKey(separator, properties, doc) {
 }
 
 // Setter method where you can specify a path and it will traverse an object, set the data and make it look similar to a derby model
-function set(obj, path, data) {
+function _set(obj, path, data) {
   var splittedPath = path.split('.');
   var obj = obj;
   var originalObj = obj;

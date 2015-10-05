@@ -2,10 +2,17 @@ var Model     = require('racer/lib/Model');
 require('./../../index.js')({Model: Model});
 
 module.exports = {
-  // Creates model 
-	setupModel: function() {
-		return model = (new Model).at('_page');
-	},
+  // Create model and possibly set it up with some data and fn
+  setupModel: function(data, fnName, fn) {
+    var fnName = fnName || 'default';
+
+    var model = (new Model).at('_page');
+
+    if(data) model.add(data);
+    if(fnName && fn) model.fn(fnName, fn);
+
+    return model;
+  },
 
 	// Adds a function that is to be executed at the specified path. Returns the name of the function.
   addFunction: function(model, collectionName, multiLevel) {
@@ -62,6 +69,3 @@ module.exports = {
     }
   }
 };
-
-
-

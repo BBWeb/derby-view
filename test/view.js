@@ -9,16 +9,38 @@ var fruits = [ {name: 'apple',  color: 'red',    amount: 5,  id: 'appleId'},
                {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'},
                {name: 'lemon',  color: 'yellow', amount: 20, id: 'lemonId'}];
 
+var fns = {
+  yellowFruits: function (emit, fruit) {
+    if (fruit.color === 'yellow') {
+      emit(fruit.name + '*' + fruit.color);
+    }
+  },
+  yellowFruitsMultilevel: function (emit, fruit) {
+    if (fruit.color === 'yellow') {
+      emit(fruit.name + '.' + fruit.color);
+    }
+  },
+  yellowFruitsWithPath: function (emit, fruit) {
+    if (fruit.color === 'yellow') {
+      emit(fruit.name + '*' + fruit.color, pathName + fruit.id);
+    }
+  },
+  yellowFruitsMultilevelWithPath: function (emit, fruit) {
+    if (fruit.color === 'yellow') {
+      emit(fruit.name + '.' + fruit.color, pathName + fruit.id);
+    }
+  }
+};
 
 describe('Derby-View', function() {
   describe('Setting up view', function() {
     it('empty collection: returns name of created view', function() {
-      var model          =  modelCreator.setupModel();
-      var collectionName =  'fruits';
-      var functionName   =  modelCreator.addFunction(model, collectionName, false); // Add a function and return it's name
-      
-      var view           =  model.at(collectionName).view(functionName); // Create view with empty collection
-      expect(view.viewName).to.equal(functionName);
+      var model          =  modelCreator.setupModel(null, 'yellowFruitsWithPath', fns['yellowFruitsWithPath']);
+
+      // Create view with empty collection
+      var view           =  model.at('fruits').view('yellowFruitsWithPath'); 
+
+      expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
 
     it('non-empty collection: returns name of created view', function() {

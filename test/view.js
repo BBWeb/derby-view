@@ -6,30 +6,30 @@ var fns           = sampleData.fns;
 var helpers       = require('./lib/helpers');
 var setupModel    = helpers.getModelSetup(fns, '*', ['name', 'color']);
 
-describe('Model.view', function() {
-  describe('Setup', function() {
-    it('Returns name of created view with empty collection', function() {
+describe('Model.view', function () {
+  describe('Setup', function () {
+    it('Returns name of created view with empty collection', function () {
       var model = setupModel();
       var view  = model.at('fruits').view('yellowFruitsWithPath'); 
       expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
 
-    it('Returns name of created view with non-empty collection', function() {
+    it('Returns name of created view with non-empty collection', function () {
       var model = setupModel({fruits: fruits});
       var view =  model.at('fruits').view('yellowFruitsWithPath');
       expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
   });
 
-  describe('Referencing', function() {
-    it('Returns empty on empty collection', function() {
+  describe('Referencing', function () {
+    it('Returns empty on empty collection', function () {
       var model = setupModel();
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('Returns filtered data on non-empty collection', function() {
+    it('Returns filtered data on non-empty collection', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -38,8 +38,8 @@ describe('Model.view', function() {
     });
   });
 
-  describe('Adding items to empty collection', function() {
-    it('Returns empty collection with filtered item', function() {
+  describe('Adding items to empty collection', function () {
+    it('Returns empty with filtered item', function () {
       var model = setupModel();
       var view  = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -47,7 +47,7 @@ describe('Model.view', function() {
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('Returns new item with non-filtered item', function() {
+    it('Returns new item with non-filtered item', function () {
       var model = setupModel();
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -57,8 +57,8 @@ describe('Model.view', function() {
     });
   });
 
-  describe('Adding items to non-empty collection', function() {
-    it('Returns original data with filtered item', function() {
+  describe('Adding items to non-empty collection', function () {
+    it('Returns original data with filtered item', function () { 
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -67,7 +67,7 @@ describe('Model.view', function() {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });  
 
-    it('Returns updated view with non-filtered item', function() {
+    it('Returns updated view with non-filtered item', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -77,8 +77,8 @@ describe('Model.view', function() {
     });
   });
 
-  describe('Removing item from collection', function() {
-    it('Returns unchanged when item is not emitted', function() {
+  describe('Removing item from collection', function () {
+    it('Returns unchanged when item is not emitted', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -87,7 +87,7 @@ describe('Model.view', function() {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     }); 
 
-    it('Returns updated view when item was previously emitted', function() {
+    it('Returns updated view when item was previously emitted', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -97,8 +97,8 @@ describe('Model.view', function() {
     });
   }); 
 
-  describe.skip('Updating item in collection', function() {
-    it('Returns new item when change previously did not cause emit but now do', function() {
+  describe.skip('Updating item in collection', function () {
+    it('Returns new item when change previously did not cause emit but now do', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
@@ -107,7 +107,7 @@ describe('Model.view', function() {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
-    it('Returns without item when change previosuly caused emit but no longer does', function() {
+    it('Returns without item when change previosuly caused emit but no longer does', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
@@ -117,15 +117,15 @@ describe('Model.view', function() {
     });
   });
 
-  describe('Passing in functions NOT defined with model.fn()', function() {
-    it('Returns empty collection with empty collection', function() {
+  describe('Passing in functions NOT defined with model.fn()', function () {
+    it('Returns empty on empty collection', function () {
       var model = setupModel();
       var view = model.at('fruits').view(fns['yellowFruitsWithPath']);
       view.ref('_page.filteredFruits');
       expect(model.get('filteredFruits')).to.be.empty();
     });
 
-    it('Returns data with non-empty collection', function() {
+    it('Returns data with non-empty collection', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view(fns['yellowFruitsWithPath']);
       view.ref('_page.filteredFruits');
@@ -134,32 +134,33 @@ describe('Model.view', function() {
     });    
   });
 
-  describe('Passing in only "key" argument to emit()', function() {
+  describe('Passing in only "key" argument to emit()', function () {
     describe('Function declared with model.fn()', function () {
-      it('Returns empty when empty collection', function() {
+      it('Returns empty on empty collection', function () {
         var model = setupModel();
         var view  = model.at('fruits').view('yellowFruits');
         view.ref('_page.filteredFruits');
         expect(model.get('filteredFruits')).to.be.empty();
       });
 
-      it('Returns data when non-empty collection', function() {
-        var model = setupModel({fruits: fruits}); 
+      it('Returns data with non-empty collection', function () {
+        var model = setupModel({fruits: fruits});
         var view =  model.at('fruits').view('yellowFruits');
-        view.ref('_page.filteredFruits');var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
+        view.ref('_page.filteredFruits');
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });
 
-    describe('Function not declared with model.fn()', function () {
-      it('Returns empty when empty collection', function() {
+    describe('Function NOT defined with model.fn()', function () {
+      it('Returns empty on empty collection', function () {
         var model = setupModel();
         var view = model.at('fruits').view(fns['yellowFruits']);
         view.ref('_page.filteredFruits');
         expect(model.get('filteredFruits')).to.be.empty();
       });
 
-      it('Returns data when non-empty', function() {
+      it('Returns data with non-empty collection', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view(fns['yellowFruits']);
         view.ref('_page.filteredFruits');
@@ -169,9 +170,9 @@ describe('Model.view', function() {
     });
   });
 
-  describe('Multilevel keys', function() {
-    describe('Basic functionality', function() {
-      it('Returns data properly structured', function() {
+  describe('Multilevel keys', function () {
+    describe('Basic functionality', function () {
+      it('Returns data properly structured', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -179,7 +180,7 @@ describe('Model.view', function() {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it('Works with only "key" argument into emit()', function() {
+      it('Works with only "key" argument into emit()', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -188,8 +189,8 @@ describe('Model.view', function() {
       });
     });
 
-    describe('Adding item to collection', function() {
-      it('View remains unchanged when adding filtered item', function() {
+    describe('Adding item to collection', function () {
+      it('View remains unchanged when adding filtered item', function () { 
         var model = setupModel();
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -197,7 +198,7 @@ describe('Model.view', function() {
         expect(model.get('filteredFruits')).to.be.empty();
       });
 
-      it('Adds item when adding non-filtered item', function() {
+      it('Adds item when adding non-filtered item', function () { // Returns updated view when adding non-filtered item
         var model = setupModel({fruits: fruits.slice(0, 3)});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -207,8 +208,8 @@ describe('Model.view', function() {
       });      
     });
 
-    describe('Removing item from collection', function() {
-      it('View remains unchanged when removing filtered item', function() {
+    describe('Removing item from collection', function () {
+      it('View remains unchanged when removing filtered item', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -217,7 +218,7 @@ describe('Model.view', function() {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it.skip('Removes item when removing non-filtered item', function() {
+      it.skip('Removes item when removing non-filtered item', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -227,8 +228,8 @@ describe('Model.view', function() {
       });
     }); 
 
-    describe('Updating item in collection', function() {
-      it.skip('Adds item when it was previously filtered, but no longer is', function() {
+    describe('Updating item in collection', function () {
+      it.skip('Adds item when it was previously filtered, but no longer is', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -237,7 +238,7 @@ describe('Model.view', function() {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it.skip('Removes item when it was previously not filtered but now is', function() {
+      it.skip('Removes item when it was previously not filtered but now is', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');      
@@ -246,5 +247,5 @@ describe('Model.view', function() {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });  
-  });  
+  }); 
 });

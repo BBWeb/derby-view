@@ -4,6 +4,7 @@ require('./../../index.js')({Model: Model});
 
 module.exports = {
   getModelSetup: getModelSetup,
+  EventListenerData: EventListenerData,
 
   // Create model and possibly set it up with some data and fn
   // TODO: Remove in favor of new helper fn
@@ -31,7 +32,7 @@ module.exports = {
 
 	// Adds a function that is to be executed at the specified path. Returns the name of the function.
   // TODO: Remove in favor of new helper fn
-  addFunction: function(model, collectionName, multiLevel) {
+  addFunction: function (model, collectionName, multiLevel) {
     var functionName	= 'yellowFruits';
     var pathName 	 	= '_page.' + collectionName + '.';
     var keySeparator;
@@ -42,7 +43,7 @@ module.exports = {
       keySeparator = '*';
     }
 
-    model.fn(functionName, function(emit, fruit) {
+    model.fn(functionName, function (emit, fruit) {
       if (fruit.color === 'yellow') {
         emit(fruit.name + keySeparator + fruit.color, pathName + fruit.id);
       }
@@ -52,22 +53,36 @@ module.exports = {
 
   // Adds data to the model
   // TODO: Remove in favor of new helper fn
-  addData: function(model, collectionName, data) {
+  addData: function (model, collectionName, data) {
     for (var i = 0, len = data.length; i < len; i++) {
       model.add(collectionName, data[i]);
     }
   },
 
   // Creates and returns a key for the specified object
-  createKey: function(args, multiLevel) {
-    if (multiLevel) { 
+  createKey: function (args) {
+    return _getPropertiesAsKey('*', ['name', 'color'], args);
+   /* if (multiLevel) { 
       return;
     } else {
       return args.name + '*' + args.color;
-    }
+    }*/
   },
 
-  createListenerDataObject: function(path, eventEmitted, args) {
+  collectListenerData: function (data, path, eventEmitted, args) {
+    data.push(_createListenerDataObject(path, eventEmitted, args));
+    
+    function _createListenerDataObject(path, eventEmitted, args) {
+      var dataObject = {};
+      dataObject['path'] = path;
+      dataObject['eventEmitted'] = eventEmitted;
+      dataObject['args'] = args;
+      return dataObject;
+    }
+    return data;
+  },
+
+  createListenerDataObject: function (path, eventEmitted, args) {
     var dataObject = {};
     dataObject['path'] = path;
     dataObject['eventEmitted'] = eventEmitted;
@@ -105,7 +120,6 @@ function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
           var id = ids[i];
           var doc = model.get(collectionName + '.' + id);
           var key = _getPropertiesAsKey(separator, properties, doc);
-
           _set(result, key, doc);
         }
       });
@@ -148,6 +162,19 @@ function _set(obj, path, data) {
 
   var segment = splittedPath.pop();
   obj[segment] = data;
-
+ 
   return originalObj;
 }
+
+
+function EventListenerData() {
+  this.eventData = [];
+};
+
+EventListenerData.prototype.collectListenerData = function(path, eventEmitted, args) {
+  var dataObject = {};
+  dataObject['path'] = path;
+  dataObject['eventEmitted'] = eventEmitted;
+  dataObject['args'] = args;
+  this.eventData.push(dataObject);
+};

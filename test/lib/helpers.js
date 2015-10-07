@@ -4,91 +4,7 @@ require('./../../index.js')({Model: Model});
 
 module.exports = {
   getModelSetup: getModelSetup,
-  EventListenerData: EventListenerData,
-
-  // Create model and possibly set it up with some data and fn
-  // TODO: Remove in favor of new helper fn
-  setupModel: function(collections, fns) {
-    var fnName = fnName || 'default';
-
-    var model = (new Model).at('_page');
-
-    if(collections) {
-      _.each(collections, function (collection, name) {
-        _.each(collection, function (doc, key) {
-          model.add(name, _.cloneDeep(doc));
-        });
-      });
-    }
-
-    if(fns) {
-      _.each(fns, function (fn, name) {
-        model.fn(name, fn);
-      });
-    }
-
-    return model;
-  },
-
-	// Adds a function that is to be executed at the specified path. Returns the name of the function.
-  // TODO: Remove in favor of new helper fn
-  addFunction: function (model, collectionName, multiLevel) {
-    var functionName	= 'yellowFruits';
-    var pathName 	 	= '_page.' + collectionName + '.';
-    var keySeparator;
-    
-    if (multiLevel) {
-      keySeparator = '.';
-    } else {
-      keySeparator = '*';
-    }
-
-    model.fn(functionName, function (emit, fruit) {
-      if (fruit.color === 'yellow') {
-        emit(fruit.name + keySeparator + fruit.color, pathName + fruit.id);
-      }
-    });
-    return functionName;
-  },
-
-  // Adds data to the model
-  // TODO: Remove in favor of new helper fn
-  addData: function (model, collectionName, data) {
-    for (var i = 0, len = data.length; i < len; i++) {
-      model.add(collectionName, data[i]);
-    }
-  },
-
-  // Creates and returns a key for the specified object
-  createKey: function (args) {
-    return _getPropertiesAsKey('*', ['name', 'color'], args);
-   /* if (multiLevel) { 
-      return;
-    } else {
-      return args.name + '*' + args.color;
-    }*/
-  },
-
-  collectListenerData: function (data, path, eventEmitted, args) {
-    data.push(_createListenerDataObject(path, eventEmitted, args));
-    
-    function _createListenerDataObject(path, eventEmitted, args) {
-      var dataObject = {};
-      dataObject['path'] = path;
-      dataObject['eventEmitted'] = eventEmitted;
-      dataObject['args'] = args;
-      return dataObject;
-    }
-    return data;
-  },
-
-  createListenerDataObject: function (path, eventEmitted, args) {
-    var dataObject = {};
-    dataObject['path'] = path;
-    dataObject['eventEmitted'] = eventEmitted;
-    dataObject['args'] = args;
-    return dataObject;
-  }
+  EventListenerData: EventListenerData
 };
 
 function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
@@ -171,6 +87,7 @@ function EventListenerData() {
   this.eventData = [];
 };
 
+// The arguments passed are saved as an object and inserted into an array.
 EventListenerData.prototype.collectListenerData = function(path, eventEmitted, args) {
   var dataObject = {};
   dataObject['path'] = path;

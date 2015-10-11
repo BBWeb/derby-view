@@ -129,7 +129,7 @@ describe('Base Events', function () {
     });
 
     // 'change' is triggered thrice (view first, then collection and then view again). It should ony be twice?
-    it.skip('Triggers "change" on collection AND view for non-filtered item', function() {
+    it('Triggers "change" on collection AND view for non-filtered item', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
@@ -137,7 +137,7 @@ describe('Base Events', function () {
       model.on('all', '**', listenerData.collectListenerData.bind(listenerData));     
       model.del('fruits.bananaId');
       expect(listenerData.eventData).to.eql([{
-          path: 'filteredFruits.mango*yellow',
+          path: 'filteredFruits.banana*yellow',
           eventEmitted: 'change',
           args: undefined
         },
@@ -185,9 +185,9 @@ describe('Base Events', function () {
       model.on('all', '**', listenerData.collectListenerData.bind(listenerData));  
       model.set('fruits.bananaId.color', 'green');
       expect(listenerData.eventData).to.eql([{
-          path: 'filteredFruits.banana*yellow.color',
+          path: 'filteredFruits.banana*yellow',
           eventEmitted: 'change',
-          args: 'green'
+          args: undefined
         },
         {
           path: 'fruits.bananaId.color',
@@ -346,9 +346,9 @@ describe('Base Events: Multilevel Keys', function() {
       model.on('all', '**', listenerData.collectListenerData.bind(listenerData));   
       model.set('fruits.bananaId.color', 'green');
       expect(listenerData.eventData).to.eql([{
-          path: 'filteredFruits.banana.yellow.color',
+          path: 'filteredFruits.banana.yellow',
           eventEmitted: 'change',
-          args: 'green'
+          args: undefined
         },
         {
           path: 'fruits.bananaId.color',

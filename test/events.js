@@ -310,7 +310,7 @@ describe('Base Events: Multilevel Keys', function() {
   // What should the order of the events be (i.e. first view and then collection OR vice versa)?
   // Not sure if the expected result should be the way it is written! (Probably needs to be updated)!!
   describe('Updating item in collection', function() {
-    it.skip('Triggers "change" on collection AND view as the update causes emit now', function() {
+    it('Triggers "change" on collection AND view as the update causes emit now', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
@@ -323,12 +323,24 @@ describe('Base Events: Multilevel Keys', function() {
           args: 'yellow'
         },
         { 
+          path: 'filteredFruits.apple',
+          eventEmitted: 'change',
+          args: {
+            yellow: {
+              name: 'apple',
+              color: 'yellow',
+              amount: 5,
+              id: 'appleId'
+            }
+          }
+        },
+        { 
           path: 'filteredFruits.apple.yellow',
           eventEmitted: 'change',
           args: {
             name: 'apple',
             color: 'yellow',
-            amount: 15,
+            amount: 5,
             id: 'appleId'
           }
         }

@@ -153,7 +153,7 @@ describe('Base Events', function () {
   // Does NOT trigger change on the view at all. Updated item is NOT included in the view as it should be.  
   // What should the order of the events be (i.e. first view and then collection OR vice versa)? 
   describe('Updating item in collection', function() {   
-    it.skip('Triggers "change" on collection AND view as the update causes emit now', function() {
+    it('Triggers "change" on collection AND view as the update causes emit now', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
@@ -168,7 +168,12 @@ describe('Base Events', function () {
         {
           path: 'filteredFruits.apple*yellow',
           eventEmitted: 'change',
-          args: 'yellow'
+          args: {
+            name: 'apple',
+            color: 'yellow',
+            amount: 5,
+            id: 'appleId'
+          }
         }
       ]);
     });

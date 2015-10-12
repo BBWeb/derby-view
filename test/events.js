@@ -129,7 +129,7 @@ describe('Base Events', function () {
     });
 
     // 'change' is triggered thrice (view first, then collection and then view again). It should ony be twice?
-    it.skip('Triggers "change" on collection AND view for non-filtered item', function() {
+    it('Triggers "change" on collection AND view for non-filtered item', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
@@ -137,7 +137,7 @@ describe('Base Events', function () {
       model.on('all', '**', listenerData.collectListenerData.bind(listenerData));     
       model.del('fruits.bananaId');
       expect(listenerData.eventData).to.eql([{
-          path: 'filteredFruits.mango*yellow',
+          path: 'filteredFruits.banana*yellow',
           eventEmitted: 'change',
           args: undefined
         },
@@ -153,7 +153,7 @@ describe('Base Events', function () {
   // Does NOT trigger change on the view at all. Updated item is NOT included in the view as it should be.  
   // What should the order of the events be (i.e. first view and then collection OR vice versa)? 
   describe('Updating item in collection', function() {   
-    it.skip('Triggers "change" on collection AND view as the update causes emit now', function() {
+    it('Triggers "change" on collection AND view as the update causes emit now', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
@@ -168,7 +168,12 @@ describe('Base Events', function () {
         {
           path: 'filteredFruits.apple*yellow',
           eventEmitted: 'change',
-          args: 'yellow'
+          args: {
+            name: 'apple',
+            color: 'yellow',
+            amount: 5,
+            id: 'appleId'
+          }
         }
       ]);
     });
@@ -185,9 +190,9 @@ describe('Base Events', function () {
       model.on('all', '**', listenerData.collectListenerData.bind(listenerData));  
       model.set('fruits.bananaId.color', 'green');
       expect(listenerData.eventData).to.eql([{
-          path: 'filteredFruits.banana*yellow.color',
+          path: 'filteredFruits.banana*yellow',
           eventEmitted: 'change',
-          args: 'green'
+          args: undefined
         },
         {
           path: 'fruits.bananaId.color',
@@ -285,7 +290,7 @@ describe('Base Events: Multilevel Keys', function() {
   // 'change' is triggered first for view, then for collection and then again for view.
   // Not sure if this is the way it should be.
   // Test case has been written to check that 'change' is triggered just twice. May need to be updated!
-    it.skip('Triggers "change" on collection AND view for non-filtered item', function() {
+    it('Triggers "change" on collection AND view for non-filtered item', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
@@ -294,6 +299,11 @@ describe('Base Events: Multilevel Keys', function() {
       model.del('fruits.bananaId');
       expect(listenerData.eventData).to.eql([{
           path: 'filteredFruits.banana.yellow',
+          eventEmitted: 'change',
+          args: undefined
+        },
+        {
+          path: 'filteredFruits.banana',
           eventEmitted: 'change',
           args: undefined
         },
@@ -310,7 +320,7 @@ describe('Base Events: Multilevel Keys', function() {
   // What should the order of the events be (i.e. first view and then collection OR vice versa)?
   // Not sure if the expected result should be the way it is written! (Probably needs to be updated)!!
   describe('Updating item in collection', function() {
-    it.skip('Triggers "change" on collection AND view as the update causes emit now', function() {
+    it('Triggers "change" on collection AND view as the update causes emit now', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
@@ -323,12 +333,24 @@ describe('Base Events: Multilevel Keys', function() {
           args: 'yellow'
         },
         { 
+          path: 'filteredFruits.apple',
+          eventEmitted: 'change',
+          args: {
+            yellow: {
+              name: 'apple',
+              color: 'yellow',
+              amount: 5,
+              id: 'appleId'
+            }
+          }
+        },
+        { 
           path: 'filteredFruits.apple.yellow',
           eventEmitted: 'change',
           args: {
             name: 'apple',
             color: 'yellow',
-            amount: 15,
+            amount: 5,
             id: 'appleId'
           }
         }
@@ -346,9 +368,14 @@ describe('Base Events: Multilevel Keys', function() {
       model.on('all', '**', listenerData.collectListenerData.bind(listenerData));   
       model.set('fruits.bananaId.color', 'green');
       expect(listenerData.eventData).to.eql([{
-          path: 'filteredFruits.banana.yellow.color',
+          path: 'filteredFruits.banana.yellow',
           eventEmitted: 'change',
-          args: 'green'
+          args: undefined
+        },
+        {
+          path: 'filteredFruits.banana',
+          eventEmitted: 'change',
+          args: undefined
         },
         {
           path: 'fruits.bananaId.color',

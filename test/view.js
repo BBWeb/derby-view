@@ -97,13 +97,13 @@ describe('Model.view', function () {
     });
   }); 
 
-  describe.skip('Updating item in collection', function () {
+  describe('Updating item in collection', function () {
     it('Returns new item when change previously did not cause emit but now does', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');
       model.set('fruits.appleId.color', 'yellow');
-      var expectedFruits = model.expectedResult({fruits: ['appleId', 'bananaId']});
+      var expectedFruits = model.expectedResult({fruits: ['appleId', 'bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
@@ -218,7 +218,7 @@ describe('Model.view', function () {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it.skip('Removes item when removing non-filtered item', function () {
+      it('Removes item when removing non-filtered item', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -229,7 +229,7 @@ describe('Model.view', function () {
     }); 
 
     describe('Updating item in collection', function () {
-      it.skip('Adds item when it was previously filtered, but no longer is', function () {
+      it('Adds item when it was previously filtered, but no longer is', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');
@@ -238,7 +238,7 @@ describe('Model.view', function () {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it.skip('Removes item when it was previously not filtered but now is', function () {
+      it('Removes item when it was previously not filtered but now is', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');      

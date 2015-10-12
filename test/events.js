@@ -351,6 +351,11 @@ describe('Base Events: Multilevel Keys', function() {
           args: undefined
         },
         {
+          path: 'filteredFruits.banana',
+          eventEmitted: 'change',
+          args: undefined
+        },
+        {
           path: 'fruits.bananaId.color',
           eventEmitted: 'change',
           args: 'green'

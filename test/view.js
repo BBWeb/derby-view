@@ -218,7 +218,7 @@ describe('Model.view', function () {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
 
-      it.skip('Removes item when removing non-filtered item', function () {
+      it('Removes item when removing non-filtered item', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');

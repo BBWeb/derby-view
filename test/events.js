@@ -128,7 +128,6 @@ describe('Base Events', function () {
       ]);
     });
 
-    // 'change' is triggered thrice (view first, then collection and then view again). It should ony be twice?
     it('Triggers "change" on collection AND view for non-filtered item', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
@@ -150,8 +149,6 @@ describe('Base Events', function () {
     });
   });
 
-  // Does NOT trigger change on the view at all. Updated item is NOT included in the view as it should be.  
-  // What should the order of the events be (i.e. first view and then collection OR vice versa)? 
   describe('Updating item in collection', function() {   
     it('Triggers "change" on collection AND view as the update causes emit now', function() {
       var listenerData = new EventListenerData();
@@ -178,10 +175,6 @@ describe('Base Events', function () {
       ]);
     });
 
-    // 'change' is fired correctly for both view and collection, but the view is NOT updated 
-    // and still contains the updated item together with the originally emitted key. Does this
-    // mean that still another event is required to update it?
-    // What should the order of the events be (i.e. first view and then collection OR vice versa)? 
     it('Triggers "change" on collection AND view as the update no longer causes emit', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
@@ -226,8 +219,6 @@ describe('Base Events: Multilevel Keys', function() {
       ]);
     });
 
-    // 'change' is triggered on collection and then once each for each level in multi-level key.
-    // Is this the way it should be?
     it('Triggers "change" on collection AND view for non-filtered item', function() {
       var listenerData = new EventListenerData();
       var model = setupModel();
@@ -287,9 +278,6 @@ describe('Base Events: Multilevel Keys', function() {
       ]);
     });
 
-  // 'change' is triggered first for view, then for collection and then again for view.
-  // Not sure if this is the way it should be.
-  // Test case has been written to check that 'change' is triggered just twice. May need to be updated!
     it('Triggers "change" on collection AND view for non-filtered item', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});
@@ -316,9 +304,6 @@ describe('Base Events: Multilevel Keys', function() {
     });
   });
 
-  // Does NOT trigger change on the view at all. Updated item is NOT included in the view as it should be.  
-  // What should the order of the events be (i.e. first view and then collection OR vice versa)?
-  // Not sure if the expected result should be the way it is written! (Probably needs to be updated)!!
   describe('Updating item in collection', function() {
     it('Triggers "change" on collection AND view as the update causes emit now', function() {
       var listenerData = new EventListenerData();
@@ -357,9 +342,6 @@ describe('Base Events: Multilevel Keys', function() {
       ]);
     });
 
-    // 'change' is triggered first for view and then for collection (seems right). Is the order correct?
-    // Problem is that the view is not updated properly. It still contains the updatem item under the
-    // originally emitted key. Does this mean that still another event is required to update it?
     it('Triggers "change" on collection AND view as the update no longer causes emit', function() {
       var listenerData = new EventListenerData();
       var model = setupModel({fruits: fruits});

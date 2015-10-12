@@ -198,7 +198,7 @@ describe('Model.view', function () {
         expect(model.get('filteredFruits')).to.be.empty();
       });
 
-      it('Adds item when adding non-filtered item', function () { // Returns updated view when adding non-filtered item
+      it('Adds item when adding non-filtered item', function () {
         var model = setupModel({fruits: fruits.slice(0, 3)});
         var view = model.at('fruits').view('yellowFruitsMultilevelWithPath');
         view.ref('_page.filteredFruits');

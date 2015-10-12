@@ -97,7 +97,7 @@ describe('Model.view', function () {
     });
   }); 
 
-  describe.skip('Updating item in collection', function () {
+  describe('Updating item in collection', function () {
     it('Returns new item when change previously did not cause emit but now does', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');

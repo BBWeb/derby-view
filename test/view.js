@@ -55,24 +55,6 @@ describe('Model.view', function () {
       var expectedFruits = model.expectedResult({fruits: ['bananaId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
-
-    describe('As if subscribed', function () {
-      it('Returns new item with non-filtered item with global listener made by Page', function () {
-        var model = setupModel();
-
-        model.root.on('change', '**', _.noop);
-        var view = model.at('fruits').view('yellowFruitsWithPath');
-        view.ref('_page.filteredFruits');
-        model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'});
-
-        // Acknowledge event as if remote event
-        var remoteDocModel = model.root.pass({$remote: true});
-        remoteDocModel.emit('load', ['_page', 'fruits', 'bananaId'], [{name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}, remoteDocModel._pass]);
-
-        var expectedFruits = model.expectedResult({fruits: ['bananaId']});
-        expect(model.get('filteredFruits')).to.eql(expectedFruits);
-      });
-    });
   });
 
   describe('Adding items to non-empty collection', function () {
@@ -130,6 +112,16 @@ describe('Model.view', function () {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
       model.set('fruits' + '.bananaId.color', 'green');
+      var expectedFruits = model.expectedResult({fruits: ['lemonId']});
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });
+
+    it("Returns similar results when change did not affect the emitted key/path AND there's a global listener (as made by Page when running full Derby)", function () {
+      var model = setupModel({fruits: fruits});
+      model.root.on('change', '**', _.noop);
+      var view = model.at('fruits').view('yellowFruitsWithPath');
+      view.ref('_page.filteredFruits');      
+      model.set('fruits' + '.bananaId.color', 'yellow');
       var expectedFruits = model.expectedResult({fruits: ['lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });

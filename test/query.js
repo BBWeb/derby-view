@@ -40,7 +40,7 @@ describe('Query', function () {
   });
 
   describe('Multi-level organized', function () {
-    it.only('Returns single category/specific set of items when querying for it', function () {
+    it('Returns single category/specific set of items when querying for it', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('colorOrganizedMultilevel');
       var query = view.query('yellow', 'yellowz');

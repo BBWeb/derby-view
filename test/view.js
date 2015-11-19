@@ -116,9 +116,8 @@ describe('Model.view', function () {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
 
-    it("Returns similar results when change did not affect the emitted key/path AND there's a global listener (as made by Page when running full Derby)", function () {
+    it("Returns un-changed results when change did not affect the emitted key/path", function () {
       var model = setupModel({fruits: fruits});
-      model.root.on('change', '**', _.noop);
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
       model.set('fruits' + '.bananaId.color', 'yellow');

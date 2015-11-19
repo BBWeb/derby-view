@@ -270,7 +270,7 @@ describe('Model.view', function () {
       });
     });
 
-    describe.only('Updating item in collection', function () {
+    describe('Updating item in collection', function () {
       it('Changes path when changing path dependent property', function () {
         var model = setupModel({fruits: fruits});
         var view = model.at('fruits').view('yellowFruitsRelated');

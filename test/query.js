@@ -22,7 +22,6 @@ describe('Query', function () {
     it('Correct order after changing relevant property', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruits');
-      view.ref('_page.delme'); // TODO: Remove ASAP we've fixed issue with needing to ref in order for updates to work
       var query = view.query('a', 'z');
       query.ref('_page.filteredFruits');
       model.set('fruits.bananaId.name', 'weird-banana');

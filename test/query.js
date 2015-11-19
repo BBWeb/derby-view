@@ -16,6 +16,15 @@ describe('Query', function () {
       var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, {array: true});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
+
+    it('Returns specific set of items when querying for it', function () {
+      var model = setupModel({fruits: fruits});
+      var view = model.at('fruits').view('colorOrganized');
+      var query = view.query('yellow', 'yellowz');
+      query.ref('_page.yellowFruits');
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, {array: true});
+      expect(model.get('yellowFruits')).to.eql(expectedFruits);
+    });
   });
 
   describe('Updating item in collection', function () {
@@ -27,6 +36,17 @@ describe('Query', function () {
       model.set('fruits.bananaId.name', 'weird-banana');
       var expectedFruits = model.expectedResult({fruits: ['lemonId', 'bananaId']}, {array: true});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });
+  });
+
+  describe('Multi-level organized', function () {
+    it.only('Returns single category/specific set of items when querying for it', function () {
+      var model = setupModel({fruits: fruits});
+      var view = model.at('fruits').view('colorOrganizedMultilevel');
+      var query = view.query('yellow', 'yellowz');
+      query.ref('_page.yellowFruits');
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, {array: true});
+      expect(model.get('yellowFruits')).to.eql(expectedFruits);
     });
   });
 });

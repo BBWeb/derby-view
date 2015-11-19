@@ -32,6 +32,12 @@ module.exports = {
       if(fruit.color === 'yellow') {
         emit(fruit.name + '*' + fruit.color, '_page.fruits.' + fruit.related);
       }
+    },
+    colorOrganized: function (emit, fruit) {
+      emit(fruit.color + '*' + fruit.id);
+    },
+    colorOrganizedMultilevel: function (emit, fruit) {
+      emit(fruit.color + '.' + fruit.id);
     }
   }
 };

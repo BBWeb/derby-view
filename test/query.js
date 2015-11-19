@@ -17,4 +17,16 @@ describe('Query', function () {
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });
+
+  describe('Updating item in collection', function () {
+    it('Correct order after changing relevant property', function () {
+      var model = setupModel({fruits: fruits});
+      var view = model.at('fruits').view('yellowFruits');
+      var query = view.query('a', 'z');
+      query.ref('_page.filteredFruits');
+      model.set('fruits.bananaId.name', 'Weird banana');
+      var expectedFruits = model.expectedResult({fruits: ['lemonId', 'bananaId']}, {array: true});
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });
+  });
 });

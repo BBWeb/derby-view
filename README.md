@@ -60,6 +60,19 @@ It can also be used as a refList (i.e. a better, more performant and general ver
 Note: Options are not currently implemented
 Note 2: Currently, a path is not needed to be specified, but you have to ref it using myQuery.ref(path) instead.
 
+#### view.queryPerLevel(path)
+
+In some scenarios, one would like to combine a multi level organization of items with a list for each category (i.e. first level) of items. It's tedious to manually maintain all these queries, and ensure new one categories are created and old ones removed. Because of that, there's a convenience fn which automatically creates a query for each unique first level, and maintains this for you. Basically, you'll use it like this:
+
+```javascript
+var view = ...
+view.queryPerLevel('_page.allMyQueries');
+
+var allItemsForASepcificCategory = model.root.get('_page.allmyQueries.<category key>');
+
+// allItemsForASepcificCategory = [item1, item2]
+```
+
 ## BELOW METHODS ARE NOT YET IMPLEMENTED!
 
 #### view.subscribe(callback)

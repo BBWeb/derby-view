@@ -48,5 +48,20 @@ describe('Query', function () {
       var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, {array: true});
       expect(model.get('yellowFruits')).to.eql(expectedFruits);
     });
+
+    describe('Query per level', function () {
+      it('Returns the appropriate lists', function () {
+        var model = setupModel({fruits: fruits});
+        var view = model.at('fruits').view('colorOrganizedMultilevel');
+        view.queryPerLevel('_page.fruitLists');
+        var expectedFruits = {
+          orange: model.expectedResult({fruits: ['orangeId']}, {array: true}),
+          red: model.expectedResult({fruits: ['appleId']}, {array: true}),
+          yellow: model.expectedResult({fruits: ['bananaId', 'lemonId']}, {array: true})
+        };
+        expect(model.get('fruitLists')).to.eql(expectedFruits);
+      });
+    });
   });
+
 });

@@ -25,9 +25,7 @@ describe('Query', function () {
       view.ref('_page.delme'); // TODO: Remove ASAP we've fixed issue with needing to ref in order for updates to work
       var query = view.query('a', 'z');
       query.ref('_page.filteredFruits');
-// console.log('START!');
       model.set('fruits.bananaId.name', 'weird-banana');
-// console.log('END!');
       var expectedFruits = model.expectedResult({fruits: ['lemonId', 'bananaId']}, {array: true});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });

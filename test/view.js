@@ -110,7 +110,7 @@ describe('Model.view', function () {
     it('Returns without item when change previosuly caused emit but no longer does', function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
-      view.ref('_page.filteredFruits');      
+      view.ref('_page.filteredFruits');
       model.set('fruits' + '.bananaId.color', 'green');
       var expectedFruits = model.expectedResult({fruits: ['lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
@@ -119,8 +119,17 @@ describe('Model.view', function () {
     it("Returns un-changed results when change did not affect the emitted key/path", function () {
       var model = setupModel({fruits: fruits});
       var view = model.at('fruits').view('yellowFruitsWithPath');
-      view.ref('_page.filteredFruits');      
+      view.ref('_page.filteredFruits');
       model.set('fruits' + '.bananaId.color', 'yellow');
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
+      expect(model.get('filteredFruits')).to.eql(expectedFruits);
+    });
+
+    it('Returns changed when change changed key and path was and is still emitted', function () {
+      var model = setupModel({fruits: fruits});
+      var view = model.at('fruits').view('yellowFruitsWithPath');
+      view.ref('_page.filteredFruits');
+      model.set('fruits' + '.bananaId.name', 'weird-banana');
       var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });

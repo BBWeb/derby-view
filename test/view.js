@@ -122,7 +122,7 @@ describe('Model.view', function () {
       var view = model.at('fruits').view('yellowFruitsWithPath');
       view.ref('_page.filteredFruits');      
       model.set('fruits' + '.bananaId.color', 'yellow');
-      var expectedFruits = model.expectedResult({fruits: ['lemonId']});
+      var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
   });

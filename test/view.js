@@ -55,6 +55,24 @@ describe('Model.view', function () {
       var expectedFruits = model.expectedResult({fruits: ['bananaId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
+
+    describe('As if subscribed', function () {
+      it('Returns new item with non-filtered item with global listener made by Page', function () {
+        var model = setupModel();
+
+        model.root.on('change', '**', _.noop);
+        var view = model.at('fruits').view('yellowFruitsWithPath');
+        view.ref('_page.filteredFruits');
+        model.add('fruits', {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'});
+
+        // Acknowledge event as if remote event
+        var remoteDocModel = model.root.pass({$remote: true});
+        remoteDocModel.emit('load', ['_page', 'fruits', 'bananaId'], [{name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'}, remoteDocModel._pass]);
+
+        var expectedFruits = model.expectedResult({fruits: ['bananaId']});
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+    });
   });
 
   describe('Adding items to non-empty collection', function () {
@@ -65,7 +83,7 @@ describe('Model.view', function () {
       model.add('fruits', {name: 'grapefruit', color: 'orange', amount: 10, id: 'grapefruitId'});
       var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
-    });  
+    });
 
     it('Returns updated view with non-filtered item', function () {
       var model = setupModel({fruits: fruits});

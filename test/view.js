@@ -133,6 +133,17 @@ describe('Model.view', function () {
       var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
       expect(model.get('filteredFruits')).to.eql(expectedFruits);
     });
+
+    describe('Without ref with init', function () {
+      it('Returns changed when change changed key and path was and is still emitted', function () {
+        var model = setupModel({fruits: fruits});
+        var view = model.at('fruits').view('yellowFruitsWithPath');
+        view._init();
+        model.set('fruits' + '.bananaId.name', 'weird-banana');
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']});
+        expect(model._get(view.pathsSegments)).to.eql(expectedFruits);
+      });
+    });
   });
 
   describe('Passing in functions NOT defined with model.fn()', function () {

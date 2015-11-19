@@ -256,5 +256,29 @@ describe('Model.view', function () {
         expect(model.get('filteredFruits')).to.eql(expectedFruits);
       });
     });  
-  }); 
+  });
+
+  describe('Other path than self', function () {
+    describe('Basic functionality', function () {
+      it('Returns filtered keys with corresponding items', function () {
+        var model = setupModel({fruits: fruits});
+        var view = model.at('fruits').view('yellowFruitsRelated');
+        view.ref('_page.filteredFruits');      
+        // model.set('fruits' + '.bananaId.related', 'yellow');
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, null, null, true);
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+    });
+
+    describe.only('Updating item in collection', function () {
+      it('Changes path when changing path dependent property', function () {
+        var model = setupModel({fruits: fruits});
+        var view = model.at('fruits').view('yellowFruitsRelated');
+        view.ref('_page.filteredFruits');
+        model.set('fruits' + '.bananaId.related', 'orangeId');
+        var expectedFruits = model.expectedResult({fruits: ['bananaId', 'lemonId']}, null, null, true);
+        expect(model.get('filteredFruits')).to.eql(expectedFruits);
+      });
+    })
+  });
 });

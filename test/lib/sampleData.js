@@ -27,6 +27,11 @@ module.exports = {
       if (fruit.color === 'yellow') {
         emit(fruit.name + '.' + fruit.color, '_page.fruits.' + fruit.id);
       }
+    },
+    yellowFruitsRelated: function (emit, fruit) {
+      if(fruit.color === 'yellow') {
+        emit(fruit.name + '*' + fruit.color, '_page.fruits.' + fruit.related);
+      }
     }
   }
 };

@@ -26,7 +26,7 @@ function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
     }
 
     // TODO: Currently only supporting one collection passed along, need to update tests as well though if/when reworking
-    model.expectedResult = function (collections, separator, properties) {
+    model.expectedResult = function (collections, separator, properties, related) {
       var result = {};
       var separator = separator || defaultSeparator;
       var properties = properties || defaultProperties;
@@ -36,6 +36,9 @@ function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
           var id = ids[i];
           var doc = model.get(collectionName + '.' + id);
           var key = _getPropertiesAsKey(separator, properties, doc);
+
+          if(related) doc = model.get(collectionName + '.' + doc.related);
+
           _set(result, key, doc);
         }
       });

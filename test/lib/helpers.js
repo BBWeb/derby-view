@@ -31,7 +31,7 @@ function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
         separator: defaultSeparator,
         properties: defaultProperties
       }, options);
-      var result = {};
+      var result = options.array ? [] : {};
 
       _.each(collections, function (ids, collectionName) {
         for(var i = 0, len = ids.length; i < len; i++) {
@@ -41,7 +41,11 @@ function getModelSetup(modelFns, defaultSeparator, defaultProperties) {
 
           if(options.related) doc = model.get(collectionName + '.' + doc.related);
 
-          _set(result, key, doc);
+          if(options.array) {
+            result.push(doc);
+          } else {
+            _set(result, key, doc);
+          }
         }
       });
 

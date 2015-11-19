@@ -1,10 +1,10 @@
 module.exports = {
   // Sample collection data
   fruits: [
-    {name: 'apple',  color: 'red',    amount: 5,  id: 'appleId'},
-    {name: 'orange', color: 'orange', amount: 10, id: 'orangeId'},
-    {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId'},
-    {name: 'lemon',  color: 'yellow', amount: 20, id: 'lemonId'}
+    {name: 'apple',  color: 'red',    amount: 5,  id: 'appleId', related: 'orangeId'},
+    {name: 'orange', color: 'orange', amount: 10, id: 'orangeId', related: 'appleId'},
+    {name: 'banana', color: 'yellow', amount: 15, id: 'bananaId', related: 'lemonId'},
+    {name: 'lemon',  color: 'yellow', amount: 20, id: 'lemonId', related: 'bananaId'}
   ],
   // Sample view fns
   fns: {

@@ -169,7 +169,8 @@ describe('Base Events', function () {
             name: 'apple',
             color: 'yellow',
             amount: 5,
-            id: 'appleId'
+            id: 'appleId',
+            related: 'orangeId'
           }
         }
       ]);
@@ -325,7 +326,8 @@ describe('Base Events: Multilevel Keys', function() {
               name: 'apple',
               color: 'yellow',
               amount: 5,
-              id: 'appleId'
+              id: 'appleId',
+              related: 'orangeId'
             }
           }
         },
@@ -336,7 +338,8 @@ describe('Base Events: Multilevel Keys', function() {
             name: 'apple',
             color: 'yellow',
             amount: 5,
-            id: 'appleId'
+            id: 'appleId',
+            related: 'orangeId'
           }
         }
       ]);

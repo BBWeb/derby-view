@@ -19,6 +19,13 @@ describe('Model.view', function () {
       var view =  model.at('fruits').view('yellowFruitsWithPath');
       expect(view.viewName).to.equal('yellowFruitsWithPath');
     });
+
+    it('Returns the same view if the view is created twice', function () {
+      var model = setupModel({fruits: fruits});
+      var view1 =  model.at('fruits').view('yellowFruitsWithPath');
+      var view2 =  model.at('fruits').view('yellowFruitsWithPath');
+      expect(view1).to.equal(view2);
+    });
   });
 
   describe('Referencing', function () {

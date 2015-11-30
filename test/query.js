@@ -75,6 +75,19 @@ describe('Query', function () {
           };
           expect(model.get('fruitLists')).to.eql(expectedFruits);
         });
+
+        it('Item moved category after changing relevant property', function () {
+          var model = setupModel({fruits: fruits});
+          var view = model.at('fruits').view('colorOrganizedMultilevel');
+          view.queryPerLevel('_page.fruitLists');
+          model.set('fruits.bananaId.color', 'orange');
+          var expectedFruits = {
+            orange: model.expectedResult({fruits: ['bananaId', 'orangeId']}, {array: true}),
+            red: model.expectedResult({fruits: ['appleId']}, {array: true}),
+            yellow: model.expectedResult({fruits: ['lemonId']}, {array: true})
+          };
+          expect(model.get('fruitLists')).to.eql(expectedFruits);
+        });
       });
     });
   });

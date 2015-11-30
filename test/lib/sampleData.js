@@ -34,10 +34,10 @@ module.exports = {
       }
     },
     colorOrganized: function (emit, fruit) {
-      emit(fruit.color + '*' + fruit.id);
+      emit(fruit.color + '*' + fruit.name);
     },
     colorOrganizedMultilevel: function (emit, fruit) {
-      emit(fruit.color + '.' + fruit.id);
+      emit(fruit.color + '.' + fruit.name);
     }
   }
 };

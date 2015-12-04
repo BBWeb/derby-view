@@ -8,9 +8,6 @@
   },
   "dependencies": {
     "lodash": "*",
-    "racer": "^0.7.0"    
-  },
-  "peerDependencies": {
     "racer": "^0.7.0"
   },
   "devDependencies": {

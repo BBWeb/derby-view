@@ -1,6 +1,6 @@
 {
   "name": "derby-view",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Derby plugin for creating map/reduce -style views and queries of those views",
   "main": "lib/index.js",
   "scripts": {

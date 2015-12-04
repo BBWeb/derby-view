@@ -7,7 +7,8 @@
     "test": "mocha"
   },
   "dependencies": {
-    "lodash": "*"
+    "lodash": "*",
+    "racer": "^0.7.0"    
   },
   "peerDependencies": {
     "racer": "^0.7.0"
@@ -15,7 +16,6 @@
   "devDependencies": {
     "expect.js": "~0.3.1",
     "mocha": "~1.17.1",
-    "racer": "^0.7.0",
     "uuid": "^2.0.1"
   },
   "author": "cjblomqvist <carl@cjblomqvist.com>",

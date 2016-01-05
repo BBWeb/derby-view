@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "lodash": "*",
-    "racer": "^0.7.0"
+    "racer": "0.7.0 - 0.8"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
